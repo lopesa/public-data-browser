@@ -1,6 +1,15 @@
 export type DepartmentOfAgricultureDataItem = {
   description: string;
   title: string;
+  distribution?: [
+    {
+      "@type": string;
+      downloadURL?: string;
+      accessURL?: string;
+      mediaType: string;
+      title: string;
+    }
+  ];
 };
 
 export type DepartmentOfAgriculture = {

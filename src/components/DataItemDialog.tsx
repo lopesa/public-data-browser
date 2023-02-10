@@ -113,7 +113,13 @@ interface DataItemDialogProps {
 
 const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
   <Dialog.Root>
-    <DialogTrigger>{dataItem.title}</DialogTrigger>
+    <DialogTrigger
+      onClick={() => {
+        console.log(dataItem);
+      }}
+    >
+      {dataItem.title}
+    </DialogTrigger>
     <Dialog.Portal>
       <DialogOverlay />
       <DialogContent>
@@ -127,11 +133,34 @@ const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
           </DialogClose>
         </Header>
         {/* <DialogDescription>{dataItem.description}</DialogDescription> */}
-        <DialogDescription
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(dataItem.description),
-          }}
-        ></DialogDescription>
+        <DialogDescription>
+          <div
+            style={{ marginBottom: "10px" }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(dataItem.description),
+            }}
+          ></div>
+          {dataItem.distribution &&
+            dataItem.distribution.map((distribution, index) => {
+              return (
+                <div key={index}>
+                  <a
+                    href={
+                      distribution.downloadURL
+                        ? distribution.downloadURL
+                        : distribution.accessURL
+                        ? distribution.accessURL
+                        : ""
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {distribution.title}
+                  </a>
+                </div>
+              );
+            })}
+        </DialogDescription>
       </DialogContent>
     </Dialog.Portal>
   </Dialog.Root>
