@@ -1,5 +1,6 @@
-type DepartmentOfAgricultureDataItem = {
+export type DepartmentOfAgricultureDataItem = {
   description: string;
+  title: string;
 };
 
 export type DepartmentOfAgriculture = {
