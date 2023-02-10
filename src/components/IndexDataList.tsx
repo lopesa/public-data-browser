@@ -5,7 +5,7 @@ function IndexDataList() {
   const { data, error, isLoading } =
     useGetBaseDepartmentOfAgricultureDataQuery("");
 
-  // debugger;
+  debugger;
 
   return (
     <div style={{ textAlign: "left", fontSize: "9px" }}>

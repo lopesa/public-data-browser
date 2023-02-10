@@ -3,6 +3,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import styled, { keyframes } from "styled-components";
 import { blackA, violet } from "@radix-ui/colors";
+import DOMPurify from "dompurify";
 
 const overlayShow = keyframes`
 from {
@@ -49,13 +50,14 @@ const DialogContent = styled(Dialog.Content)`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-width: 450px;
+  max-width: 530px;
   max-height: 85vh;
-  padding: 25px;
+  padding: 0 25px;
   animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
   &:focus {
     outline: none;
   }
+  overflow: scroll;
 `;
 
 const DialogDescription = styled(Dialog.Description)`
@@ -63,8 +65,12 @@ const DialogDescription = styled(Dialog.Description)`
   color: var(--mauve11);
   font-size: 15px;
   line-height: 1.5;
+  overflow: scroll;
 `;
 
+const DialogTitle = styled(Dialog.Title)`
+  margin: 10px 0;
+`;
 const IconButton = styled.button`
   all: unset;
   font-family: inherit;
@@ -76,8 +82,8 @@ const IconButton = styled.button`
   justify-content: center;
   color: ${violet.violet11};
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0;
+  right: 0;
   &:hover {
     background-color: ${violet.violet4};
   }
@@ -88,6 +94,17 @@ const IconButton = styled.button`
 
 const DialogClose = styled(Dialog.Close)`
   all: unset;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+`;
+
+const Header = styled.header`
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 2;
+  padding-top: 10px;
 `;
 
 interface DataItemDialogProps {
@@ -100,13 +117,21 @@ const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
     <Dialog.Portal>
       <DialogOverlay />
       <DialogContent>
-        <Dialog.Title>{dataItem.title}</Dialog.Title>
-        <DialogDescription>{dataItem.description}</DialogDescription>
-        <DialogClose>
-          <IconButton className="IconButton" aria-label="Close">
-            <Cross2Icon />
-          </IconButton>
-        </DialogClose>
+        <Header>
+          <DialogTitle>{dataItem.title}</DialogTitle>
+
+          <DialogClose>
+            <IconButton className="IconButton" aria-label="Close">
+              <Cross2Icon />
+            </IconButton>
+          </DialogClose>
+        </Header>
+        {/* <DialogDescription>{dataItem.description}</DialogDescription> */}
+        <DialogDescription
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(dataItem.description),
+          }}
+        ></DialogDescription>
       </DialogContent>
     </Dialog.Portal>
   </Dialog.Root>
