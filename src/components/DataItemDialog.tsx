@@ -140,23 +140,30 @@ const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
               __html: DOMPurify.sanitize(dataItem.description),
             }}
           ></div>
+          {dataItem.distribution && (
+            <div style={{ marginTop: "20px" }}>
+              <b>Distribution:</b>
+            </div>
+          )}
           {dataItem.distribution &&
             dataItem.distribution.map((distribution, index) => {
               return (
                 <div key={index}>
-                  <a
-                    href={
-                      distribution.downloadURL
-                        ? distribution.downloadURL
-                        : distribution.accessURL
-                        ? distribution.accessURL
-                        : ""
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {distribution.title}
-                  </a>
+                  <p>
+                    <a
+                      href={
+                        distribution.downloadURL
+                          ? distribution.downloadURL
+                          : distribution.accessURL
+                          ? distribution.accessURL
+                          : ""
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {distribution.title || distribution.downloadURL}
+                    </a>
+                  </p>
                 </div>
               );
             })}
