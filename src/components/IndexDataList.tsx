@@ -6,6 +6,7 @@ import type {
   DepartmentOfAgriculture,
   DepartmentOfAgricultureDataItem,
 } from "types/department-of-agriculture";
+import PageScrollSpy from "components/PageScrollSpy";
 
 function IndexDataList() {
   const PAGE_LENGTH = 300;
@@ -53,6 +54,14 @@ function IndexDataList() {
           <DataItemDialog key={index} dataItem={item} />
         ))}
       {error && <div>Error: {`${error}`}</div>}
+      <PageScrollSpy
+        pixelsToBottom={300}
+        scrollEvent={(closeToBottom) => {
+          if (closeToBottom) {
+            setLastIndex(lastIndex + PAGE_LENGTH);
+          }
+        }}
+      />
     </div>
   );
 }

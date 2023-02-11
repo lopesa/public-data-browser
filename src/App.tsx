@@ -10,7 +10,7 @@ function App() {
       <header className="App-header">
         {/* <Counter /> */}
         <h1>Public Data Browser</h1>
-        <h3>Simplifying Browsing Public data with a modern interface</h3>
+        <h3>A Central Place to Browse Public data</h3>
       </header>
       <div style={{ margin: "0 auto", padding: "0 100px" }}>
         <IndexDataList />
