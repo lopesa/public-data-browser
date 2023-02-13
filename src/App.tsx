@@ -4,6 +4,12 @@ import React from "react";
 import IndexDataList from "components/IndexDataList";
 import "./App.css";
 
+import { useGetBaseDepartmentOfAgricultureDataQuery } from "services/department-of-agriculture";
+import type {
+  DepartmentOfAgriculture,
+  DepartmentOfAgricultureDataItem,
+} from "types/department-of-agriculture";
+
 function App() {
   return (
     <div className="App">
@@ -13,7 +19,7 @@ function App() {
         <h3>A Central Place to Browse Public data</h3>
       </header>
       <div style={{ margin: "0 auto", padding: "0 100px" }}>
-        <IndexDataList />
+        <IndexDataList datasetId="departmentOfAgriculture" />
       </div>
     </div>
   );
