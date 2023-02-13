@@ -4,6 +4,7 @@ import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture
 import styled, { keyframes } from "styled-components";
 import { blackA, violet } from "@radix-ui/colors";
 import DOMPurify from "dompurify";
+import { MouseEventHandler, ReactEventHandler } from "react";
 
 const overlayShow = keyframes`
 from {
@@ -70,9 +71,18 @@ const DialogDescription = styled(Dialog.Description)`
 
 const DialogTitle = styled(Dialog.Title)`
   margin: 10px 0;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 2;
+  padding-top: 10px;
 `;
-const IconButton = styled.button`
+
+const DialogClose = styled(Dialog.Close)`
   all: unset;
+  position: fixed;
+  top: 10px;
+  right: 10px;
   font-family: inherit;
   border-radius: 100%;
   height: 25px;
@@ -81,35 +91,28 @@ const IconButton = styled.button`
   align-items: center;
   justify-content: center;
   color: ${violet.violet11};
-  position: absolute;
-  top: 0;
-  right: 0;
   &:hover {
     background-color: ${violet.violet4};
   }
   &:focus {
     box-shadow: 0 0 0 2px ${violet.violet7};
   }
-`;
-
-const DialogClose = styled(Dialog.Close)`
-  all: unset;
-  position: fixed;
-  top: 10px;
-  right: 10px;
-`;
-
-const Header = styled.header`
-  position: sticky;
-  top: 0;
-  background-color: white;
   z-index: 2;
-  padding-top: 10px;
 `;
 
 interface DataItemDialogProps {
   dataItem: DepartmentOfAgricultureDataItem;
 }
+
+const getFileExtension = (filename: string) => {
+  // return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+  return filename.slice(-3);
+};
+
+const onClickDownloadXls = (e: React.MouseEvent<HTMLButtonElement>) => {
+  console.log(e.currentTarget.value);
+  debugger;
+};
 
 const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
   <Dialog.Root>
@@ -123,51 +126,54 @@ const DataItemDialog = ({ dataItem }: DataItemDialogProps) => (
     <Dialog.Portal>
       <DialogOverlay />
       <DialogContent>
-        <Header>
-          <DialogTitle>{dataItem.title}</DialogTitle>
+        <DialogTitle>{dataItem.title}</DialogTitle>
 
-          <DialogClose>
-            <IconButton className="IconButton" aria-label="Close">
-              <Cross2Icon />
-            </IconButton>
-          </DialogClose>
-        </Header>
-        {/* <DialogDescription>{dataItem.description}</DialogDescription> */}
-        <DialogDescription>
-          <div
-            style={{ marginBottom: "10px" }}
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(dataItem.description),
-            }}
-          ></div>
-          {dataItem.distribution && (
-            <div style={{ marginTop: "20px" }}>
-              <b>Distribution:</b>
-            </div>
-          )}
-          {dataItem.distribution &&
-            dataItem.distribution.map((distribution, index) => {
-              return (
-                <div key={index}>
-                  <p>
-                    <a
-                      href={
-                        distribution.downloadURL
-                          ? distribution.downloadURL
-                          : distribution.accessURL
-                          ? distribution.accessURL
-                          : ""
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {distribution.title || distribution.downloadURL}
-                    </a>
-                  </p>
-                </div>
-              );
-            })}
-        </DialogDescription>
+        <DialogClose aria-label="Close">
+          <Cross2Icon />
+        </DialogClose>
+        <DialogDescription
+          style={{ marginBottom: "10px" }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(dataItem.description),
+          }}
+        ></DialogDescription>
+        {dataItem.distribution && (
+          <DialogDescription style={{ marginTop: "20px" }}>
+            <b>Distribution:</b>
+          </DialogDescription>
+        )}
+        {dataItem.distribution &&
+          dataItem.distribution.map((distribution, index) => {
+            return (
+              <DialogDescription key={index}>
+                <a
+                  href={
+                    distribution.downloadURL
+                      ? distribution.downloadURL
+                      : distribution.accessURL
+                      ? distribution.accessURL
+                      : ""
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {distribution.title || distribution.downloadURL}
+                </a>
+                {distribution.downloadURL &&
+                  getFileExtension(distribution.downloadURL) === "xls" && (
+                    <div>
+                      <button
+                        onClick={(e) => {
+                          onClickDownloadXls(e);
+                        }}
+                      >
+                        Download xls
+                      </button>
+                    </div>
+                  )}
+              </DialogDescription>
+            );
+          })}
       </DialogContent>
     </Dialog.Portal>
   </Dialog.Root>
