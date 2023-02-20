@@ -11,44 +11,42 @@ interface IndexDataListProps {
 function IndexDataList({ datasetId }: IndexDataListProps) {
   const PAGE_LENGTH = 300;
   const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
-  const { data, error, isLoading } = DatasetIndex[datasetId].dataService("");
+  const { data, error, isLoading } = DatasetIndex[datasetId].getAll();
 
   // adapted from here: https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced#selecting-values-from-results
   const selectPaginatedDataItems = useMemo(() => {
     // Return a unique selector instance for this page so that
     // the filtered results are correctly memoized
     return createSelector(
-      (res?: typeof data) => res?.dataset,
+      (res?: typeof data) => res,
       (res: typeof data, lastIndex: number) => lastIndex,
-      (dataset, lastIndex) => (dataset ? dataset.slice(0, lastIndex) : [])
+      (res, lastIndex) => (res ? res.slice(0, lastIndex) : [])
     );
   }, []);
 
-  const { paginatedDataItems } = DatasetIndex[datasetId].dataService("", {
-    selectFromResult: (result: typeof data) => ({
+  const { paginatedDataItems } = DatasetIndex[datasetId].getAll(undefined, {
+    selectFromResult: (result) => ({
       ...result,
       paginatedDataItems: selectPaginatedDataItems(
-        result.data || { dataset: [] },
+        result.data || [],
         lastIndex
       ),
     }),
   });
 
-  // debugger;
-
   return (
     <div style={{ textAlign: "left", fontSize: "9px" }}>
       {data && <h2>Current Dataset: {DatasetIndex[datasetId].title}</h2>}
       <h4>
-        {data && <span>Total Num Items: {data.dataset.length}</span>} /
+        {data && <span>Total Num Items: {data.length}</span>} /
         {paginatedDataItems && (
           <span> Current Num Items: {paginatedDataItems.length}</span>
         )}
       </h4>
       {isLoading && <div>Loading...</div>}
       {(paginatedDataItems as typeof data) &&
-        paginatedDataItems.map((item: typeof data.dataset, index: number) => (
-          <DataItemDialog key={index} dataItem={item} />
+        paginatedDataItems.map((item, index: number) => (
+          <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
         ))}
       {error && <div>Error: {`${error}`}</div>}
       <PageScrollSpy

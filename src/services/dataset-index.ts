@@ -1,16 +1,21 @@
-import { useGetBaseDepartmentOfAgricultureDataQuery } from "services/department-of-agriculture";
+import {
+  useGetBaseDepartmentOfAgricultureDataAllQuery,
+  useGetDepartmentOfAgricultureDataByIdQuery,
+} from "services/department-of-agriculture";
 
 import { DatasetsAvailable } from "types/dataset-index-type";
 
 const DatasetIndex: {
   [key in DatasetsAvailable]: {
     title: string;
-    dataService: any;
+    getAll: typeof useGetBaseDepartmentOfAgricultureDataAllQuery;
+    getById: typeof useGetDepartmentOfAgricultureDataByIdQuery;
   };
 } = {
   departmentOfAgriculture: {
     title: "Department of Agriculture",
-    dataService: useGetBaseDepartmentOfAgricultureDataQuery,
+    getAll: useGetBaseDepartmentOfAgricultureDataAllQuery,
+    getById: useGetDepartmentOfAgricultureDataByIdQuery,
   },
 };
 
