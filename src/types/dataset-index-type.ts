@@ -1,1 +1,4 @@
-export type DatasetsAvailable = "departmentOfAgriculture";
+export const enum DatasetsAvailable {
+  departmentOfAgriculture = "departmentOfAgriculture",
+  departmentOfEnergy = "departmentOfEnergy",
+}

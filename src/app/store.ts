@@ -3,17 +3,21 @@ import counterReducer from "../features/counter/counterSlice";
 
 // import { setupListeners } from '@reduxjs/toolkit/query'
 import { departmentOfAgricultureApi } from "services/department-of-agriculture";
+import { departmentOfEnergyApi } from "services/department-of-energy";
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     [departmentOfAgricultureApi.reducerPath]:
       departmentOfAgricultureApi.reducer,
+    [departmentOfEnergyApi.reducerPath]: departmentOfEnergyApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(departmentOfAgricultureApi.middleware),
+    getDefaultMiddleware()
+      .concat(departmentOfAgricultureApi.middleware)
+      .concat(departmentOfEnergyApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

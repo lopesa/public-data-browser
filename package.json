@@ -7,6 +7,7 @@
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-icons": "^1.1.1",
     "@radix-ui/react-popover": "1.0.3",
+    "@radix-ui/react-select": "^1.2.0",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
