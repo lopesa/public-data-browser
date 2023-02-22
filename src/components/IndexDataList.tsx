@@ -1,9 +1,14 @@
 import DataItemDialog from "components/DataItemDialog";
-import { useMemo, useState } from "react";
-import { createSelector } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react";
 import PageScrollSpy from "components/PageScrollSpy";
-import DatasetIndex from "services/dataset-index";
+import DatasetIndex, {
+  getDatasetGetAllMethod,
+  getDatasetEndpointName,
+} from "services/dataset-index";
 import { DatasetsAvailable } from "types/dataset-index-type";
+
+import { useAppDispatch } from "../app/hooks";
+import { apiSlice } from "../services/apiSlice";
 interface IndexDataListProps {
   datasetId: DatasetsAvailable;
 }
@@ -11,28 +16,15 @@ interface IndexDataListProps {
 function IndexDataList({ datasetId }: IndexDataListProps) {
   const PAGE_LENGTH = 300;
   const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
-  const { data, error, isLoading } = DatasetIndex[datasetId].getAll();
+  const dispatch = useAppDispatch();
+  let method = getDatasetGetAllMethod(datasetId);
+  const { data, error, isLoading, isFetching, refetch, isError } = method();
 
-  // adapted from here: https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced#selecting-values-from-results
-  const selectPaginatedDataItems = useMemo(() => {
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
-    return createSelector(
-      (res?: typeof data) => res,
-      (res: typeof data, lastIndex: number) => lastIndex,
-      (res, lastIndex) => (res ? res.slice(0, lastIndex) : [])
-    );
-  }, []);
-
-  const { paginatedDataItems } = DatasetIndex[datasetId].getAll(undefined, {
-    selectFromResult: (result) => ({
-      ...result,
-      paginatedDataItems: selectPaginatedDataItems(
-        result.data || [],
-        lastIndex
-      ),
-    }),
-  });
+  useEffect(() => {
+    const datasetIndexName = getDatasetEndpointName(datasetId);
+    if (!datasetIndexName) return;
+    dispatch(apiSlice.endpoints[datasetIndexName].initiate());
+  }, [datasetId, dispatch]);
 
   return (
     <div style={{ textAlign: "left", fontSize: "9px" }}>
@@ -40,14 +32,15 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       {data && (
         <h4>
           <span>Total Num Items: {data.length}</span>/
-          {paginatedDataItems && (
-            <span> Current Num Items: {paginatedDataItems.length}</span>
-          )}
+          {data && <span> Current Num Items: {data.length}</span>}
         </h4>
       )}
       {isLoading && <div>Loading...</div>}
-      {(paginatedDataItems as typeof data) &&
-        paginatedDataItems.map((item, index: number) => (
+      {isFetching && <div>Fetching...</div>}
+      {/* {isError && <div>isError...</div>}
+      {error && <div>error...</div>} */}
+      {(data as typeof data) &&
+        data?.map((item: any, index: number) => (
           <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
         ))}
       {error && (
@@ -58,7 +51,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
             : "problem getting data for this source"}
         </div>
       )}
-      {/* {error && <div>Error: {`${error} || error getting data`}</div>} */}
+      {error && <div>Error: {`${error} || error getting data`}</div>}
       <PageScrollSpy
         pixelsToBottom={300}
         scrollEvent={(closeToBottom) => {

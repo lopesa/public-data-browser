@@ -123,7 +123,9 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
     dataItem.id,
     { skip }
   );
+
   const onOpenChange = (open: boolean) => {
+    // could also use useLazyQuery
     setSkip(!open);
   };
 
