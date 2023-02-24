@@ -1,4 +1,5 @@
 import DataItemDialog from "components/DataItemDialog";
+import DataItemsAccordion from "components/DataItemAccordion";
 import { useEffect, useMemo, useState } from "react";
 import PageScrollSpy from "components/PageScrollSpy";
 import DatasetIndex, {
@@ -10,6 +11,8 @@ import { DatasetsAvailable } from "types/dataset-index-type";
 import { useAppDispatch } from "../app/hooks";
 import { apiSlice } from "../services/apiSlice";
 import { createSelector } from "@reduxjs/toolkit";
+import PDBCheckbox from "./PDB_Checkbox";
+
 interface IndexDataListProps {
   datasetId: DatasetsAvailable;
 }
@@ -17,6 +20,7 @@ interface IndexDataListProps {
 function IndexDataList({ datasetId }: IndexDataListProps) {
   const PAGE_LENGTH = 300;
   const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
+  const [showOnlyWithXml, setShowOnlyWithXml] = useState(false);
   const dispatch = useAppDispatch();
   let method = getDatasetGetAllMethod(datasetId);
   const { data, error, isLoading, isFetching, refetch, isError } = method();
@@ -35,9 +39,25 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
     // Return a unique selector instance for this page so that
     // the filtered results are correctly memoized
     return createSelector(
-      (res?: typeof data) => res,
+      (res: typeof data) => res,
       (res: typeof data, lastIndex: number) => lastIndex,
-      (res, lastIndex) => (res ? res.slice(0, lastIndex) : [])
+      (res: typeof data, lastIndex: number, showOnlyWithXml: boolean) =>
+        showOnlyWithXml,
+      (res, lastIndex, showOnlyWithXml) => {
+        if (!res) {
+          return [];
+        }
+        let returnVal = res.slice(0, lastIndex);
+        if (!showOnlyWithXml) {
+          return returnVal;
+        }
+        return returnVal.filter((item: any) => {
+          if (!item.dataTypesByFileExtension.length) {
+            return false;
+          }
+          return item.dataTypesByFileExtension.includes("xls");
+        });
+      }
     );
   }, []);
 
@@ -45,8 +65,9 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
     selectFromResult: (result) => ({
       ...result,
       paginatedDataItems: selectPaginatedDataItems(
-        result.data || [],
-        lastIndex
+        result.data,
+        lastIndex,
+        showOnlyWithXml
       ),
     }),
   });
@@ -60,11 +81,17 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
           {data && <span> Current Num Items: {paginatedDataItems.length}</span>}
         </h4>
       )}
+      <PDBCheckbox
+        label="Show only items with XML"
+        onCheckedChange={setShowOnlyWithXml}
+      />
       {isLoading && <div>Loading...</div>}
       {isFetching && <div>Fetching...</div>}
       {/* {isError && <div>isError...</div>}
       {error && <div>error...</div>} */}
       {(paginatedDataItems as typeof data) &&
+        // <DataItemsAccordion dataItems={paginatedDataItems} />
+
         paginatedDataItems?.map((item: any, index: number) => (
           <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
         ))}

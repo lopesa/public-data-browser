@@ -1,7 +1,7 @@
 type DepartmentOfAgricultureDistibutionItem = {
   "@type": string;
-  downloadURL: string;
-  accessURL: string;
+  downloadURL?: string;
+  accessURL?: string;
   format: string;
   mediaType: string;
   title: string;
