@@ -1,7 +1,7 @@
-type DepartmentOfEnergyDistibutionItem = {
+export type DepartmentOfEnergyDistributionItem = {
   "@type": string;
-  downloadURL: string;
-  accessURL: string;
+  downloadURL?: string;
+  accessURL?: string;
   format: string;
   mediaType: string;
   title: string;
@@ -15,7 +15,7 @@ export type DepartmentOfEnergyDataItem = {
   accessLevel?: string;
   contactPoint?: string;
   programCode?: string;
-  distribution?: DepartmentOfEnergyDistibutionItem[];
+  distribution?: DepartmentOfEnergyDistributionItem[];
   license?: string;
   bureauCode?: string;
   modified?: string;

@@ -55,7 +55,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
           if (!item.dataTypesByFileExtension.length) {
             return false;
           }
-          return item.dataTypesByFileExtension.includes("xls");
+          return item.dataTypesByFileExtension.includes("csv");
         });
       }
     );
@@ -82,7 +82,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         </h4>
       )}
       <PDBCheckbox
-        label="Show only items with XML"
+        label="Show only items with CSV"
         onCheckedChange={setShowOnlyWithXml}
       />
       {isLoading && <div>Loading...</div>}

@@ -1,4 +1,4 @@
-type DepartmentOfAgricultureDistibutionItem = {
+export type DepartmentOfAgricultureDistributionItem = {
   "@type": string;
   downloadURL?: string;
   accessURL?: string;
@@ -15,7 +15,7 @@ export type DepartmentOfAgricultureDataItem = {
   accessLevel?: string;
   contactPoint?: string;
   programCode?: string;
-  distribution?: DepartmentOfAgricultureDistibutionItem[];
+  distribution?: DepartmentOfAgricultureDistributionItem[];
   license?: string;
   bureauCode?: string;
   modified?: string;
