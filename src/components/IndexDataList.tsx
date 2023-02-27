@@ -1,5 +1,5 @@
 import DataItemDialog from "components/DataItemDialog";
-import DataItemsAccordion from "components/DataItemAccordion";
+import DataItemsAccordion from "components/DataItemsAccordion";
 import { useEffect, useMemo, useState } from "react";
 import PageScrollSpy from "components/PageScrollSpy";
 import DatasetIndex, {
@@ -21,6 +21,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
   const PAGE_LENGTH = 300;
   const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
   const [showOnlyWithXml, setShowOnlyWithXml] = useState(false);
+  const [openAllAccordions, setOpenAllAccordions] = useState(false);
   const dispatch = useAppDispatch();
   let method = getDatasetGetAllMethod(datasetId);
   const { data, error, isLoading, isFetching, refetch, isError } = method();
@@ -85,16 +86,26 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         label="Show only items with CSV"
         onCheckedChange={setShowOnlyWithXml}
       />
+      <PDBCheckbox
+        label="Open all accordions"
+        onCheckedChange={setOpenAllAccordions}
+      />
       {isLoading && <div>Loading...</div>}
       {isFetching && <div>Fetching...</div>}
       {/* {isError && <div>isError...</div>}
       {error && <div>error...</div>} */}
-      {(paginatedDataItems as typeof data) &&
-        // <DataItemsAccordion dataItems={paginatedDataItems} />
+      {
+        (paginatedDataItems as typeof data) && (
+          <DataItemsAccordion
+            dataItems={paginatedDataItems}
+            openAll={openAllAccordions}
+          />
+        )
 
-        paginatedDataItems?.map((item: any, index: number) => (
-          <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
-        ))}
+        // paginatedDataItems?.map((item: any, index: number) => (
+        //   <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
+        // ))
+      }
       {error && (
         <div>
           Error:{" "}

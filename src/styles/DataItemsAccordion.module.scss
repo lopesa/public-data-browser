@@ -1,0 +1,20 @@
+/* reset */
+.AccordionRoot {
+  h3 {
+    // AccordionTrigger
+    margin: 0;
+  }
+  .AccordionTrigger {
+    all: unset;
+    cursor: pointer;
+    display: block;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+  }
+
+  .AccordionContent {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin-bottom: 15px;
+  }
+}
