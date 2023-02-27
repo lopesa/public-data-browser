@@ -1,12 +1,16 @@
-// button {
-//   all: unset;
-// }
+@import "@radix-ui/colors/mauve.css";
 
 .DialogTrigger {
   all: unset;
-  // font-size: 20px;
   cursor: pointer;
   display: block;
-  font-size: 1em;
-  margin-bottom: 5px;
+  margin: 5px 0;
+  border: 1px solid var(--mauve12);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  padding: 0 5px;
+  font-weight: 500;
 }

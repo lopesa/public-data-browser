@@ -5,14 +5,18 @@ import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
 import styles from "styles/DataItemsAccordion.module.scss";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
+import DataItemDialog from "./DataItemDialog";
+import { DatasetsAvailable } from "types/dataset-index-type";
 
 interface DataItemsAccordionProps {
   dataItems: DepartmentOfAgricultureDataItem[] | DepartmentOfEnergyDataItem[];
+  datasetId: DatasetsAvailable;
   openAll?: boolean;
 }
 
 const DataItemsAccordion = ({
   dataItems,
+  datasetId,
   openAll,
 }: DataItemsAccordionProps) => {
   const [value, setValue] = useState<string[]>([]);
@@ -40,12 +44,12 @@ const DataItemsAccordion = ({
               </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Content className={styles.AccordionContent}>
-              {/* {dataItem.description} */}
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(dataItem.description),
-                }}
-              ></div>
+              <div>{dataItem.description}</div>
+              <DataItemDialog
+                key={index}
+                dataItem={dataItem}
+                datasetId={datasetId}
+              />
             </Accordion.Content>
           </Accordion.Item>
         ))}

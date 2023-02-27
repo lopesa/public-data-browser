@@ -98,6 +98,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         (paginatedDataItems as typeof data) && (
           <DataItemsAccordion
             dataItems={paginatedDataItems}
+            datasetId={datasetId}
             openAll={openAllAccordions}
           />
         )

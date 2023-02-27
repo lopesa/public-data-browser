@@ -80,8 +80,9 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
         onClick={() => {
           console.log(dataItem);
         }}
+        className={styles.DialogTrigger}
       >
-        <div className={styles.DialogTrigger}>{dataItem.title}</div>
+        <button>Details</button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
