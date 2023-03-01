@@ -5,22 +5,21 @@ import {
   useGetDepartmentOfEnergyDataByIdQuery,
 } from "services/apiSlice";
 
-import { DatasetsAvailable } from "types/dataset-index-type";
+import {
+  DatasetsAvailable,
+  DatasetEndpointNames,
+  GetAllQueryMethodTypes,
+  GetByIdQueryMethodTypes,
+} from "types/dataset-index-type";
 
-export const DatasetIndex: {
-  [key in DatasetsAvailable]: {
-    title: string;
-    getAll:
-      | typeof useGetBaseDepartmentOfAgricultureDataAllQuery
-      | typeof useGetBaseDepartmentOfEnergyDataAllQuery;
-    getById:
-      | typeof useGetDepartmentOfAgricultureDataByIdQuery
-      | typeof useGetDepartmentOfEnergyDataByIdQuery;
-    endpointName?:
-      | "getBaseDepartmentOfAgricultureDataAll"
-      | "getBaseDepartmentOfEnergyDataAll";
-  };
-} = {
+interface DatasetInfo {
+  title: string;
+  getAll: GetAllQueryMethodTypes;
+  getById: GetByIdQueryMethodTypes;
+  endpointName?: DatasetEndpointNames;
+}
+
+export const DatasetIndex: Record<DatasetsAvailable, DatasetInfo> = {
   departmentOfAgriculture: {
     title: "US Department of Agriculture",
     getAll: useGetBaseDepartmentOfAgricultureDataAllQuery,
@@ -37,9 +36,7 @@ export const DatasetIndex: {
 
 export const getDatasetGetAllMethod = (
   dataset: DatasetsAvailable
-):
-  | typeof useGetBaseDepartmentOfAgricultureDataAllQuery
-  | typeof useGetBaseDepartmentOfEnergyDataAllQuery => {
+): GetAllQueryMethodTypes => {
   return DatasetIndex[dataset].getAll;
 };
 

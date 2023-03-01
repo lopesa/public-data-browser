@@ -37,7 +37,9 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
               Object.keys(DatasetIndex).map((key, index) => {
                 return (
                   <Select.Item value={key} key={index}>
-                    <Select.ItemText>{key}</Select.ItemText>
+                    <Select.ItemText>
+                      {DatasetIndex[key as DatasetsAvailable].title}
+                    </Select.ItemText>
                     <Select.ItemIndicator />
                   </Select.Item>
                 );
