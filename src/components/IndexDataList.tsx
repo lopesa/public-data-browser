@@ -42,15 +42,16 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
     // the filtered results are correctly memoized
     return createSelector(
       (res: typeof data) => res,
-      (res: typeof data, lastIndex: number) => lastIndex,
-      (res: typeof data, lastIndex: number, showOnlyWithXml: boolean) =>
-        showOnlyWithXml,
-      (res, lastIndex, showOnlyWithXml) => {
+      // (res: typeof data, lastIndex: number) => lastIndex,
+      (res: typeof data, showOnlyWithXml: boolean) => showOnlyWithXml,
+      // (res, lastIndex, showOnlyWithXml) => {
+      (res, showOnlyWithXml) => {
         if (!res) {
           return [];
         }
 
-        let returnVal = res.data?.slice(0, lastIndex);
+        // let returnVal = res.data?.slice(0, lastIndex);
+        let returnVal = res.data;
         if (!showOnlyWithXml) {
           return returnVal;
         }
@@ -64,12 +65,12 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
     );
   }, []);
 
-  const { paginatedDataItems } = DatasetIndex[datasetId].getAll(undefined, {
+  const { filteredDataItems } = DatasetIndex[datasetId].getAll(undefined, {
     selectFromResult: (result) => ({
       ...result,
-      paginatedDataItems: selectPaginatedDataItems(
+      filteredDataItems: selectPaginatedDataItems(
         result.data,
-        lastIndex,
+        // lastIndex,
         showOnlyWithXml
       ),
     }),
@@ -97,9 +98,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       {data && (
         <h4>
           <span>Total Num Items: {data.data?.length}</span>/
-          {data && (
-            <span> Current Num Items: {paginatedDataItems?.length}</span>
-          )}
+          {data && <span> Current Num Items: {filteredDataItems?.length}</span>}
         </h4>
       )}
       <div className={styles.CheckboxGroupContainer}>
@@ -117,16 +116,16 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       {/* {isError && <div>isError...</div>}
       {error && <div>error...</div>} */}
       {
-        // (paginatedDataItems as typeof data) && (
-        paginatedDataItems && (
+        // (filteredDataItems as typeof data) && (
+        filteredDataItems && (
           <DataItemsAccordion
-            dataItems={paginatedDataItems}
+            dataItems={filteredDataItems}
             datasetId={datasetId}
             openAll={openAllAccordions}
           />
         )
 
-        // paginatedDataItems?.map((item: any, index: number) => (
+        // filteredDataItems?.map((item: any, index: number) => (
         //   <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
         // ))
       }
