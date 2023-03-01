@@ -103,7 +103,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       )}
       <div className={styles.CheckboxGroupContainer}>
         <PDBCheckbox
-          label="Show only items with CSV"
+          label="Show only items with csv"
           onCheckedChange={setShowOnlyWithXml}
         />
         <PDBCheckbox

@@ -143,19 +143,6 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
                       </a>
                     </Dialog.Description>
                     {getPreviewDataLink(distribution)}
-                    {/* {distribution.downloadURL &&
-                      getFileExtension(distribution.downloadURL) === "xls" && (
-                        <div>
-                          <button
-                            onClick={(e) => {
-                              onClickDownloadXls(e);
-                            }}
-                          >
-                            Download xls
-                          </button>
-                        </div>
-                      )} */}
-                    {/* </Dialog.Description> */}
                   </div>
                 );
               })}

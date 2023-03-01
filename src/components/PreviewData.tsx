@@ -2,15 +2,23 @@ import * as d3 from "d3";
 import { DSVParsedArray, DSVRowString } from "d3";
 import { useEffect, useState } from "react";
 import styles from "styles/PreviewData.module.scss";
+import PapaParse from "papaparse";
+import * as XLSX from "xlsx";
+import DataGrid from "react-data-grid";
+import { read, utils } from "xlsx";
 
 interface PreviewDataProps {
   url: string;
 }
 const PreviewData = ({ url }: PreviewDataProps) => {
   const NUM_PREVIEW_ROWS = 200;
-  const [data, setData] = useState<void | DSVRowString<string>[]>();
-  const [dataSubset, setDataSubset] = useState<d3.DSVRowString<string>[]>([]);
+  const [data, setData] = useState<void | string[][]>();
+  const [dataSubset, setDataSubset] = useState<string[][]>([]);
+  // const [data, setData] = useState<void | DSVRowString<string>[]>();
+  // const [dataSubset, setDataSubset] = useState<d3.DSVRowString<string>[]>([]);
   const [dataKeys, setDataKeys] = useState<string[]>();
+  const [columns, setColumns] = useState([]);
+  const [rows, setRows] = useState([]);
   const parseData = (
     data: void | DSVParsedArray<DSVRowString<string>>
   ): d3.DSVRowString<string>[] | void => {
@@ -23,25 +31,62 @@ const PreviewData = ({ url }: PreviewDataProps) => {
 
     // debugger;
   };
+
+  // for xml
+  // useEffect(() => {
+  //   (async () => {
+  //     const proxiedRequestUrl = `http://localhost:8080/${url}`;
+
+  //     // for xls files
+  //     const wb = read(await (await fetch(proxiedRequestUrl)).arrayBuffer(), {
+  //       WTF: true,
+  //     });
+
+  //     /* use sheet_to_json with header: 1 to generate an array of arrays */
+  //     const data: any = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+  //       header: 1,
+  //     });
+
+  //     const testColumns = data[0].map((r: any) => ({ key: r, name: r }));
+
+  //     const testRows = data.slice(1).map((r: any) =>
+  //       r.reduce((acc: any, x: any, i: any) => {
+  //         acc[data[0][i]] = x;
+  //         return acc;
+  //       }, {})
+  //     );
+
+  //     debugger;
+
+  //     /* see react-data-grid docs to understand the shape of the expected data */
+  //     // setColumns(data[0].map((r: any) => ({ key: r, name: r })));
+  //     // setRows(
+  //     //   data.slice(1).map((r: any) =>
+  //     //     r.reduce((acc: any, x: any, i: any) => {
+  //     //       acc[data[0][i]] = x;
+  //     //       return acc;
+  //     //     }, {})
+  //     //   )
+  //     // );
+  //   })();
+  // });
+
   useEffect(() => {
     (async () => {
       const proxiedRequestUrl = `http://localhost:8080/${url}`;
-      const result = await d3
-        .csv(proxiedRequestUrl, (d) => d)
-        .catch((e) => {
-          console.log(e);
-        });
-      // debugger;
-      setData(result);
-      const dataSubset = parseData(result);
+      const data = await (await fetch(proxiedRequestUrl)).text();
+      const parsedCsvData: PapaParse.ParseResult<string[]> =
+        PapaParse.parse(data);
+      setData(parsedCsvData.data);
+      const dataSubset = parsedCsvData.data.slice(0, NUM_PREVIEW_ROWS);
       setDataSubset(dataSubset || []);
       if (!dataSubset?.length) {
         return;
       }
-      const keys = Object.keys(dataSubset[0]);
-      setDataKeys(keys);
+      setDataKeys(dataSubset[0]);
     })();
   }, [url]);
+
   return (
     <div className={styles.PreviewDataContainer}>
       <div>Data Preview</div>
@@ -63,9 +108,9 @@ const PreviewData = ({ url }: PreviewDataProps) => {
             {dataSubset.map((row, index) => {
               return (
                 <tr key={index} className={styles.DataTableRow}>
-                  {dataKeys?.map((key) => (
-                    <td key={key} className={styles.DataTableCell}>
-                      {row[key]}
+                  {row.map((cell, index) => (
+                    <td key={index} className={styles.DataTableCell}>
+                      {cell}
                     </td>
                   ))}
                 </tr>
