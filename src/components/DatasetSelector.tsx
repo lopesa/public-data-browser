@@ -7,27 +7,32 @@ import {
 import DatasetIndex from "services/dataset-index";
 import { useState } from "react";
 import { DatasetsAvailable } from "types/dataset-index-type";
+import styles from "styles/DatasetSelector.module.scss";
 
 interface DatasetSelectorProps {
   onSelect: (value: DatasetsAvailable) => void;
+  triggerClassName?: string;
 }
 
-const DatasetSelector = ({ onSelect }: DatasetSelectorProps) => {
+const DatasetSelector: React.FC<DatasetSelectorProps> = ({
+  onSelect,
+  triggerClassName,
+}: DatasetSelectorProps) => {
   const [selectedDataset, setSelectedDataset] = useState<DatasetsAvailable>();
   return (
     <Select.Root onValueChange={onSelect}>
-      <Select.Trigger>
+      <Select.Trigger className={`${triggerClassName} ${styles.SelectTrigger}`}>
         <Select.Value placeholder="Select a dataset…" />
-        <Select.Icon>
+        <Select.Icon className={styles.SelectIcon}>
           <ChevronDownIcon />
         </Select.Icon>
         <Select.Icon />
       </Select.Trigger>
 
       <Select.Portal>
-        <Select.Content>
-          <Select.ScrollUpButton />
-          <Select.Viewport>
+        <Select.Content className={styles.SelectContent}>
+          {/* <Select.ScrollUpButton /> */}
+          <Select.Viewport className={styles.SelectViewport}>
             {DatasetIndex &&
               Object.keys(DatasetIndex).map((key, index) => {
                 return (

@@ -7,19 +7,17 @@ import {
 import styled, { keyframes } from "styled-components";
 import { blackA, violet } from "@radix-ui/colors";
 import DOMPurify from "dompurify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatasetIndex from "services/dataset-index";
 import { DatasetsAvailable } from "types/dataset-index-type";
-import "styles/DialogStyles.scss";
-
 import styles from "styles/DataItemDialog.module.scss";
-
 import ChartDialog from "./ChartDialog";
 import {
   DepartmentOfEnergyDataItem,
   DepartmentOfEnergyDistributionItem,
 } from "types/department-of-energy";
 import { getFileExtension } from "utils/utils-general";
+import PreviewData from "./PreviewData";
 
 type DataItem = DepartmentOfAgricultureDataItem | DepartmentOfEnergyDataItem;
 type DistributionItems =
@@ -43,16 +41,24 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
     { skip }
   );
 
-  const getChartDialogLink = (distributionItem: DistributionItems) => {
+  const getPreviewDataLink = (distributionItem: DistributionItems) => {
     const url = distributionItem?.downloadURL || distributionItem?.accessURL;
     if (!url) {
       return;
     }
     const extension = getFileExtension(url);
-    const shouldOfferChartDialog =
+    const shouldOfferPreviewData =
       typeof extension === "string" && extension.includes("csv");
 
-    return shouldOfferChartDialog && <ChartDialog chartItemUrl={url} />;
+    // return shouldOfferPreviewData && <ChartDialog chartItemUrl={url} />;
+    // return shouldOfferPreviewData && <PreviewData url={url} />;
+    return (
+      shouldOfferPreviewData && (
+        <div className={styles.PreviewDataContainer}>
+          <PreviewData url={url} />
+        </div>
+      )
+    );
 
     // {distribution.downloadURL &&
     //   getFileExtension(distribution.downloadURL) === "xls" && (
@@ -73,6 +79,12 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
     setSkip(!open);
   };
 
+  useEffect(() => {
+    if (data) {
+      console.log("Full Data: ", data);
+    }
+  }, [data]);
+
   return (
     <Dialog.Root onOpenChange={onOpenChange}>
       <Dialog.Trigger
@@ -85,12 +97,17 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
         <button>Details</button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="DialogOverlay" />
+        <Dialog.Overlay className={styles.DialogOverlay} />
         {!data && <Dialog.Content>...loading</Dialog.Content>}
         {data && (
-          <Dialog.Content className="DialogContent">
-            <Dialog.Title className="DialogTitle">{data.title}</Dialog.Title>
-            <Dialog.Close className="DialogClose" aria-label="Close">
+          <Dialog.Content className={styles.DialogContent}>
+            <Dialog.Title className={styles.DialogTitle}>
+              {data.title}
+            </Dialog.Title>
+            <Dialog.Close
+              className={styles.DialogCloseButton}
+              aria-label="Close"
+            >
               <Cross2Icon />
             </Dialog.Close>
             <Dialog.Description asChild>
@@ -109,21 +126,23 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
             {data.distribution &&
               data.distribution.map((distribution, index) => {
                 return (
-                  <Dialog.Description className="DialogDescription" key={index}>
-                    <a
-                      href={
-                        distribution.downloadURL
-                          ? distribution.downloadURL
-                          : distribution.accessURL
-                          ? distribution.accessURL
-                          : ""
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {distribution.title || distribution.downloadURL}
-                    </a>
-                    {getChartDialogLink(distribution)}
+                  <div key={index}>
+                    <Dialog.Description className="DialogDescription">
+                      <a
+                        href={
+                          distribution.downloadURL
+                            ? distribution.downloadURL
+                            : distribution.accessURL
+                            ? distribution.accessURL
+                            : ""
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {distribution.title || distribution.downloadURL}
+                      </a>
+                    </Dialog.Description>
+                    {getPreviewDataLink(distribution)}
                     {/* {distribution.downloadURL &&
                       getFileExtension(distribution.downloadURL) === "xls" && (
                         <div>
@@ -136,7 +155,8 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
                           </button>
                         </div>
                       )} */}
-                  </Dialog.Description>
+                    {/* </Dialog.Description> */}
+                  </div>
                 );
               })}
           </Dialog.Content>

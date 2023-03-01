@@ -1,0 +1,39 @@
+.PreviewDataContainer {
+  width: 100%;
+  height: 100%;
+  .DataTableContainer {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    .DataTable {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      .DataTableHeader {
+        background-color: var(--violet3);
+        .DataTableHeaderCell {
+          padding: 10px;
+          font-size: 1.2em;
+          color: var(--violet11);
+          text-align: left;
+          border-bottom: 1px solid var(--violet7);
+        }
+      }
+      .DataTableRow {
+        &:nth-child(odd) {
+          background-color: var(--violet4);
+        }
+        &:nth-child(even) {
+          background-color: var(--violet5);
+        }
+        .DataTableCell {
+          padding: 10px;
+          font-size: 1.2em;
+          color: var(--violet11);
+          text-align: left;
+          border-bottom: 1px solid var(--violet7);
+        }
+      }
+    }
+  }
+}

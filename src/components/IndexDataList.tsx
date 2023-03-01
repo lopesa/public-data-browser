@@ -12,6 +12,7 @@ import { useAppDispatch } from "../app/hooks";
 import { apiSlice } from "../services/apiSlice";
 import { createSelector } from "@reduxjs/toolkit";
 import PDBCheckbox from "./PDB_Checkbox";
+import styles from "styles/IndexDataList.module.scss";
 
 interface IndexDataListProps {
   datasetId: DatasetsAvailable;
@@ -74,7 +75,7 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
   });
 
   return (
-    <div style={{ textAlign: "left", fontSize: "9px" }}>
+    <div className={styles.IndexDataListContainer}>
       {data && <h2>Current Dataset: {DatasetIndex[datasetId].title}</h2>}
       {data && (
         <h4>
@@ -82,14 +83,16 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
           {data && <span> Current Num Items: {paginatedDataItems.length}</span>}
         </h4>
       )}
-      <PDBCheckbox
-        label="Show only items with CSV"
-        onCheckedChange={setShowOnlyWithXml}
-      />
-      <PDBCheckbox
-        label="Open all accordions"
-        onCheckedChange={setOpenAllAccordions}
-      />
+      <div className={styles.CheckboxGroupContainer}>
+        <PDBCheckbox
+          label="Show only items with CSV"
+          onCheckedChange={setShowOnlyWithXml}
+        />
+        <PDBCheckbox
+          label="Open all accordions"
+          onCheckedChange={setOpenAllAccordions}
+        />
+      </div>
       {isLoading && <div>Loading...</div>}
       {isFetching && <div>Fetching...</div>}
       {/* {isError && <div>isError...</div>}

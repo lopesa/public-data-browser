@@ -2,12 +2,13 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon } from "@radix-ui/react-icons";
 import styled from "styled-components";
 import { blackA, violet } from "@radix-ui/colors";
+import styles from "styles/PDBCheckbox.module.scss";
 
 const CheckboxRoot = styled(Checkbox.Root)`
   background-color: white;
-  width: 25px;
-  height: 25px;
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,14 +35,14 @@ const PDBCheckbox = ({ onCheckedChange, label }: PDBCheckboxProps) => (
     <div style={{ display: "flex", alignItems: "center" }}>
       <CheckboxRoot
         onCheckedChange={onCheckedChange}
-        className="CheckboxRoot"
+        className={styles.CheckboxRoot}
         id="c1"
       >
-        <CheckboxIndicator className="CheckboxIndicator">
+        <CheckboxIndicator className={styles.CheckboxIndicator}>
           <CheckIcon />
         </CheckboxIndicator>
       </CheckboxRoot>
-      <label className="Label" htmlFor="c1">
+      <label className={styles.CheckboxLabel} htmlFor="c1">
         {label}
       </label>
     </div>

@@ -1,0 +1,13 @@
+.IndexDataListContainer {
+  text-align: "left";
+  font-size: 9px;
+
+  .CheckboxGroupContainer {
+    display: flex;
+    margin-bottom: 10px;
+
+    > * {
+      margin-right: 10px;
+    }
+  }
+}
