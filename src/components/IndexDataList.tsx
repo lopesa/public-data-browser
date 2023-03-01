@@ -49,7 +49,8 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         if (!res) {
           return [];
         }
-        let returnVal = res.slice(0, lastIndex);
+
+        let returnVal = res.data?.slice(0, lastIndex);
         if (!showOnlyWithXml) {
           return returnVal;
         }
@@ -76,11 +77,29 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
 
   return (
     <div className={styles.IndexDataListContainer}>
-      {data && <h2>Current Dataset: {DatasetIndex[datasetId].title}</h2>}
+      {data && (
+        <>
+          <h2>Current Dataset: {DatasetIndex[datasetId].title}</h2>
+          <h3>
+            Original Discovery URL:{" "}
+            <a href={data.originalIntialUrl} target="_blank" rel="noreferrer">
+              {data.originalIntialUrl}
+            </a>
+          </h3>
+          <h3>
+            Original JSON src URL:{" "}
+            <a href={data.originalJsonDataUrl} target="_blank" rel="noreferrer">
+              {data.originalJsonDataUrl}
+            </a>
+          </h3>
+        </>
+      )}
       {data && (
         <h4>
-          <span>Total Num Items: {data.length}</span>/
-          {data && <span> Current Num Items: {paginatedDataItems.length}</span>}
+          <span>Total Num Items: {data.data?.length}</span>/
+          {data && (
+            <span> Current Num Items: {paginatedDataItems?.length}</span>
+          )}
         </h4>
       )}
       <div className={styles.CheckboxGroupContainer}>
@@ -98,7 +117,8 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       {/* {isError && <div>isError...</div>}
       {error && <div>error...</div>} */}
       {
-        (paginatedDataItems as typeof data) && (
+        // (paginatedDataItems as typeof data) && (
+        paginatedDataItems && (
           <DataItemsAccordion
             dataItems={paginatedDataItems}
             datasetId={datasetId}

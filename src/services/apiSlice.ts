@@ -4,6 +4,12 @@ import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
 
 const BASE_URL = "http://localhost:3001";
 
+type GetInitialDataType = {
+  data: DepartmentOfAgricultureDataItem[] | DepartmentOfEnergyDataItem[];
+  originalJsonDataUrl?: string;
+  originalIntialUrl?: string;
+};
+
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
@@ -14,7 +20,8 @@ export const apiSlice = createApi({
   // refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     getBaseDepartmentOfAgricultureDataAll: builder.query<
-      DepartmentOfAgricultureDataItem[],
+      // DepartmentOfAgricultureDataItem[],
+      GetInitialDataType,
       void
     >({
       query: () => ({
@@ -31,7 +38,8 @@ export const apiSlice = createApi({
       }),
     }),
     getBaseDepartmentOfEnergyDataAll: builder.query<
-      DepartmentOfEnergyDataItem[],
+      // DepartmentOfEnergyDataItem[],
+      GetInitialDataType,
       void
     >({
       query: () => ({
