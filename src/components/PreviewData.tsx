@@ -14,23 +14,23 @@ const PreviewData = ({ url }: PreviewDataProps) => {
   const NUM_PREVIEW_ROWS = 200;
   const [data, setData] = useState<void | string[][]>();
   const [dataSubset, setDataSubset] = useState<string[][]>([]);
+  const [dataKeys, setDataKeys] = useState<string[]>();
   // const [data, setData] = useState<void | DSVRowString<string>[]>();
   // const [dataSubset, setDataSubset] = useState<d3.DSVRowString<string>[]>([]);
-  const [dataKeys, setDataKeys] = useState<string[]>();
-  const [columns, setColumns] = useState([]);
-  const [rows, setRows] = useState([]);
-  const parseData = (
-    data: void | DSVParsedArray<DSVRowString<string>>
-  ): d3.DSVRowString<string>[] | void => {
-    if (!data?.length) {
-      return;
-    }
-    const previewSet = data.slice(0, NUM_PREVIEW_ROWS);
-    return previewSet;
-    // setData(previewSet);
+  // const [columns, setColumns] = useState([]);
+  // const [rows, setRows] = useState([]);
+  // const parseData = (
+  //   data: void | DSVParsedArray<DSVRowString<string>>
+  // ): d3.DSVRowString<string>[] | void => {
+  //   if (!data?.length) {
+  //     return;
+  //   }
+  //   const previewSet = data.slice(0, NUM_PREVIEW_ROWS);
+  //   return previewSet;
+  //   // setData(previewSet);
 
-    // debugger;
-  };
+  //   // debugger;
+  // };
 
   // for xml
   // useEffect(() => {
@@ -79,11 +79,11 @@ const PreviewData = ({ url }: PreviewDataProps) => {
         PapaParse.parse(data);
       setData(parsedCsvData.data);
       const dataSubset = parsedCsvData.data.slice(0, NUM_PREVIEW_ROWS);
+      setDataKeys(dataSubset.shift());
       setDataSubset(dataSubset || []);
       if (!dataSubset?.length) {
         return;
       }
-      setDataKeys(dataSubset[0]);
     })();
   }, [url]);
 

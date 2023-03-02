@@ -18,6 +18,7 @@ import {
 } from "types/department-of-energy";
 import { getFileExtension } from "utils/utils-general";
 import PreviewData from "./PreviewData";
+import * as Tabs from "@radix-ui/react-tabs";
 
 type DataItem = DepartmentOfAgricultureDataItem | DepartmentOfEnergyDataItem;
 type DistributionItems =
@@ -85,6 +86,22 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
     }
   }, [data]);
 
+  const getDataPointHTML = (key: string) => {
+    if (!data || !key) {
+      return;
+    }
+    const value = data[key as keyof typeof data];
+    if (value === null) {
+      return;
+    }
+    return (
+      <div key={key} style={{ marginBottom: "10px" }}>
+        <span style={{ fontWeight: "bold" }}>{`• ${key}: `}</span>
+        <span>{typeof value === "string" ? value : JSON.stringify(value)}</span>
+      </div>
+    );
+  };
+
   return (
     <Dialog.Root onOpenChange={onOpenChange}>
       <Dialog.Trigger
@@ -118,34 +135,63 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
                 }}
               ></div>
             </Dialog.Description>
-            {data.distribution && (
-              <Dialog.Description className="DialogDescription">
-                <b>Distribution:</b>
-              </Dialog.Description>
-            )}
-            {data.distribution &&
-              data.distribution.map((distribution, index) => {
-                return (
-                  <div key={index}>
-                    <Dialog.Description className="DialogDescription">
-                      <a
-                        href={
-                          distribution.downloadURL
-                            ? distribution.downloadURL
-                            : distribution.accessURL
-                            ? distribution.accessURL
-                            : ""
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {distribution.title || distribution.downloadURL}
-                      </a>
-                    </Dialog.Description>
-                    {getPreviewDataLink(distribution)}
-                  </div>
-                );
-              })}
+
+            {/* <div> */}
+            <Tabs.Root className={styles.TabsRoot} defaultValue="tab1">
+              <Tabs.List
+                className={styles.TabsList}
+                aria-label="Manage your account"
+              >
+                <Tabs.Trigger className={styles.TabsTrigger} value="tab1">
+                  All Data
+                </Tabs.Trigger>
+                {data.distribution && (
+                  <Tabs.Trigger className={styles.TabsTrigger} value="tab2">
+                    Preview Distribution data
+                  </Tabs.Trigger>
+                )}
+              </Tabs.List>
+              <div style={{ overflow: "scroll" }}>
+                <Tabs.Content className={styles.TabsContent} value="tab1">
+                  {Object.keys(data).map((key) => {
+                    return getDataPointHTML(key);
+                  })}
+                </Tabs.Content>
+                {data.distribution && (
+                  <Tabs.Content className={styles.TabsContent} value="tab2">
+                    {data.distribution && (
+                      <Dialog.Description className="DialogDescription">
+                        <b>Distribution:</b>
+                      </Dialog.Description>
+                    )}
+                    {data.distribution &&
+                      data.distribution.map((distribution, index) => {
+                        return (
+                          <div key={index}>
+                            <Dialog.Description className="DialogDescription">
+                              <a
+                                href={
+                                  distribution.downloadURL
+                                    ? distribution.downloadURL
+                                    : distribution.accessURL
+                                    ? distribution.accessURL
+                                    : ""
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {distribution.title || distribution.downloadURL}
+                              </a>
+                            </Dialog.Description>
+                            {getPreviewDataLink(distribution)}
+                          </div>
+                        );
+                      })}
+                  </Tabs.Content>
+                )}
+              </div>
+            </Tabs.Root>
+            {/* </div> */}
           </Dialog.Content>
         )}
       </Dialog.Portal>
