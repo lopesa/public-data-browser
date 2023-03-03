@@ -1,3 +1,8 @@
+@import "@radix-ui/colors/cyan.css";
+@import "@radix-ui/colors/mauve.css";
+@import "@radix-ui/colors/indigo.css";
+@import "@radix-ui/colors/sand.css";
+
 .AppContainer {
   display: flex;
   flex-direction: column;
@@ -5,14 +10,35 @@
   justify-content: center;
 
   .AppHeaderBlock {
-    text-align: center;
-    margin: 25px auto 10px;
-    h1,
-    h3 {
+    color: var(--sand11);
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    box-shadow: 0px 3px 10px var(--sand6);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: white;
+    h1 {
+      font-size: 1.2em;
+      text-transform: uppercase;
+      font-stretch: condensed;
+      width: 15%;
+      margin: 0;
+      transform: translateX(10px);
+    }
+    h2 {
+      font-size: 0.8em;
       margin: 0;
     }
-    h1 {
-      margin-bottom: 10px;
+    .MenuPositioner {
+      width: 15%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateX(-10px);
     }
   }
 
@@ -22,7 +48,7 @@
     width: 1100px;
 
     .DatasetSelector {
-      margin: 0 auto 40px;
+      margin: 30px auto 40px;
       display: block;
     }
   }
