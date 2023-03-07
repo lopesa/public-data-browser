@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import DataItemDialog from "./DataItemDialog";
 import { DatasetsAvailable } from "types/dataset-index-type";
+import { InitialIndexDataItem } from "types/types-general";
 
 interface DataItemsAccordionProps {
-  dataItems: DepartmentOfAgricultureDataItem[] | DepartmentOfEnergyDataItem[];
+  dataItems: InitialIndexDataItem[];
   datasetId: DatasetsAvailable;
   openAll?: boolean;
 }

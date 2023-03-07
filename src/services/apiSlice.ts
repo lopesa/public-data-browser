@@ -1,14 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
+import { InitialIndexData } from "types/types-general";
 
 const BASE_URL = "http://localhost:3001";
-
-type GetInitialDataType = {
-  data: DepartmentOfAgricultureDataItem[] | DepartmentOfEnergyDataItem[];
-  originalJsonDataUrl?: string;
-  originalIntialUrl?: string;
-};
 
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
@@ -20,8 +15,7 @@ export const apiSlice = createApi({
   // refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     getBaseDepartmentOfAgricultureDataAll: builder.query<
-      // DepartmentOfAgricultureDataItem[],
-      GetInitialDataType,
+      InitialIndexData,
       void
     >({
       query: () => ({
@@ -37,11 +31,7 @@ export const apiSlice = createApi({
         url: `/department-of-agriculture/${id}`,
       }),
     }),
-    getBaseDepartmentOfEnergyDataAll: builder.query<
-      // DepartmentOfEnergyDataItem[],
-      GetInitialDataType,
-      void
-    >({
+    getBaseDepartmentOfEnergyDataAll: builder.query<InitialIndexData, void>({
       query: () => ({
         url: "/department-of-energy",
       }),

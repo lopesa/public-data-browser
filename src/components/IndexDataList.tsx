@@ -56,10 +56,11 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
           return returnVal;
         }
         return returnVal.filter((item: any) => {
-          if (!item.dataTypesByFileExtension.length) {
+          if (!item.dataTypesByFileExtension?.length) {
             return false;
           }
           return item.dataTypesByFileExtension.includes("csv");
+          // return !!item.spatialData;
         });
       }
     );

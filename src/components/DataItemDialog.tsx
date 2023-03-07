@@ -19,14 +19,14 @@ import {
 import { getFileExtension } from "utils/utils-general";
 import PreviewData from "./PreviewData";
 import * as Tabs from "@radix-ui/react-tabs";
+import { InitialIndexDataItem } from "types/types-general";
 
-type DataItem = DepartmentOfAgricultureDataItem | DepartmentOfEnergyDataItem;
 type DistributionItems =
   | DepartmentOfAgricultureDistributionItem
   | DepartmentOfEnergyDistributionItem;
 
 interface DataItemDialogProps {
-  dataItem: DataItem;
+  dataItem: InitialIndexDataItem;
   datasetId: DatasetsAvailable;
 }
 
@@ -127,14 +127,14 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
             >
               <Cross2Icon />
             </Dialog.Close>
-            <Dialog.Description asChild>
+            {/* <Dialog.Description asChild>
               <div
                 className="DialogDescription"
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(data.description),
                 }}
               ></div>
-            </Dialog.Description>
+            </Dialog.Description> */}
 
             {/* <div> */}
             <Tabs.Root className={styles.TabsRoot} defaultValue="tab1">
