@@ -140,7 +140,7 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
             <Tabs.Root className={styles.TabsRoot} defaultValue="tab1">
               <Tabs.List
                 className={styles.TabsList}
-                aria-label="Manage your account"
+                aria-label="@TODO: Add aria-label"
               >
                 <Tabs.Trigger className={styles.TabsTrigger} value="tab1">
                   All Data

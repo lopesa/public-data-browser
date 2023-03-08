@@ -6,15 +6,19 @@ import PapaParse from "papaparse";
 import * as XLSX from "xlsx";
 import DataGrid from "react-data-grid";
 import { read, utils } from "xlsx";
+import { useGetSpreadsheetDataQuery } from "services/apiSlice";
 
 interface PreviewDataProps {
   url: string;
 }
 const PreviewData = ({ url }: PreviewDataProps) => {
   const NUM_PREVIEW_ROWS = 200;
-  const [data, setData] = useState<void | string[][]>();
+  // const [data, setData] = useState<void | string[][]>();
   const [dataSubset, setDataSubset] = useState<string[][]>([]);
   const [dataKeys, setDataKeys] = useState<string[]>();
+  const [totalRowsAvailable, setTotalRowsAvailable] = useState<number>(0);
+  const { data, error, isLoading, isFetching, refetch, isError } =
+    useGetSpreadsheetDataQuery(url);
   // const [data, setData] = useState<void | DSVRowString<string>[]>();
   // const [dataSubset, setDataSubset] = useState<d3.DSVRowString<string>[]>([]);
   // const [columns, setColumns] = useState([]);
@@ -70,28 +74,39 @@ const PreviewData = ({ url }: PreviewDataProps) => {
   //     // );
   //   })();
   // });
-
   useEffect(() => {
-    (async () => {
-      const proxiedRequestUrl = `http://localhost:8080/${url}`;
-      const data = await (await fetch(proxiedRequestUrl)).text();
-      const parsedCsvData: PapaParse.ParseResult<string[]> =
-        PapaParse.parse(data);
-      setData(parsedCsvData.data);
-      const dataSubset = parsedCsvData.data.slice(0, NUM_PREVIEW_ROWS);
-      setDataKeys(dataSubset.shift());
-      setDataSubset(dataSubset || []);
-      if (!dataSubset?.length) {
-        return;
-      }
-    })();
-  }, [url]);
+    // debugger;
+    if (!data?.data?.length) {
+      return;
+    }
+    setDataKeys(data?.data[0]);
+    setDataSubset(data?.data.slice(1) || []);
+    setTotalRowsAvailable(data?.totalRows || 0);
+  }, [data]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const proxiedRequestUrl = `http://localhost:8080/${url}`;
+  //     const data = await (await fetch(proxiedRequestUrl)).text();
+  //     const parsedCsvData: PapaParse.ParseResult<string[]> =
+  //       PapaParse.parse(data);
+  //     setData(parsedCsvData.data);
+  //     const dataSubset = parsedCsvData.data.slice(0, NUM_PREVIEW_ROWS);
+  //     setDataKeys(dataSubset.shift());
+  //     setDataSubset(dataSubset || []);
+  //     if (!dataSubset?.length) {
+  //       return;
+  //     }
+  //   })();
+  // }, [url]);
 
   return (
     <div className={styles.PreviewDataContainer}>
       <div>Data Preview</div>
       <div>
-        Total preview rows: {dataSubset.length} / {data?.length} total rows
+        Total preview rows: {dataSubset.length} / {totalRowsAvailable} total
+        rows
+        {/* Total preview rows: {dataSubset.length} / {data?.length} total rows */}
       </div>
       {(dataSubset.length && (
         <div className={styles.DataTableContainer}>

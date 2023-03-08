@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
-import { InitialIndexData } from "types/types-general";
+import { InitialIndexData, SpreadsheetData } from "types/types-general";
 
 const BASE_URL = "http://localhost:3001";
 
@@ -45,6 +45,11 @@ export const apiSlice = createApi({
         url: `/department-of-energy/${id}`,
       }),
     }),
+    getSpreadsheetData: builder.query<SpreadsheetData, string>({
+      query: (url) => ({
+        url: `/get-spreadsheet-data/${encodeURIComponent(url)}`,
+      }),
+    }),
   }),
 });
 
@@ -55,4 +60,5 @@ export const {
   useGetDepartmentOfAgricultureDataByIdQuery,
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
+  useGetSpreadsheetDataQuery,
 } = apiSlice;

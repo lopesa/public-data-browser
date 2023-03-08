@@ -12,3 +12,8 @@ export type InitialIndexData = {
   originalJsonDataUrl: string;
   originalIntialUrl: string;
 };
+
+export type SpreadsheetData = {
+  totalRows: number;
+  data: string[][];
+};
