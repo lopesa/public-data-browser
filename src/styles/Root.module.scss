@@ -1,0 +1,43 @@
+@import "@radix-ui/colors/sand.css";
+
+.AppHeaderBlock {
+  color: var(--sand11);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  box-shadow: 0px 3px 10px var(--sand6);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white;
+  h1 {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-stretch: condensed;
+    // width: 15%;
+    margin: 0;
+    transform: translateX(10px);
+  }
+  h2 {
+    font-size: 0.8em;
+    margin: 0;
+  }
+  .MenuPositioner {
+    width: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-10px);
+  }
+  // .link {
+  //   text-decoration: "none";
+  // }
+  // a {
+  //   all: unset !important;
+  // }
+}
+// a:-webkit-any-link {
+//   text-decoration: none;
+// }

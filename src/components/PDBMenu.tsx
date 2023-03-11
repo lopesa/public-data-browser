@@ -1,6 +1,7 @@
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import styles from "styles/PDBMenu.module.scss";
+import { Link } from "react-router-dom";
 
 // interface PDBMenuProps {}
 
@@ -17,11 +18,8 @@ const PDBMenu = () => {
           </NavigationMenu.Content>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
-          <NavigationMenu.Link
-            className={styles.NavigationMenuLink}
-            href="/my-data"
-          >
-            My Data
+          <NavigationMenu.Link asChild className={styles.NavigationMenuLink}>
+            <Link to="/bookmarks">Bookmarks</Link>
           </NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu.List>

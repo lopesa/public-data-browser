@@ -20,7 +20,6 @@ export const bookmarksSlice = createSlice({
       state: BookmarksState,
       action: PayloadAction<InitialIndexDataItem>
     ) => {
-      debugger;
       state.value.push(action.payload);
     },
     removeBookmark: (
