@@ -43,7 +43,7 @@ const DataItemsAccordion = ({
   }, [dataItems, openAll]);
 
   const isBookmarked = (id: string) => {
-    return bookmarks.find((item) => item.id === id);
+    return bookmarks.find((bookmark) => bookmark.item.id === id);
   };
 
   const onClickBookmark = (e: React.MouseEvent<SVGElement>) => {
@@ -57,8 +57,13 @@ const DataItemsAccordion = ({
       return;
     }
     isBookmarked(id)
-      ? dispatch(removeBookmark(fullDataItemFromId))
-      : dispatch(addBookmark(fullDataItemFromId));
+      ? dispatch(removeBookmark({ item: fullDataItemFromId, datasetId }))
+      : dispatch(
+          addBookmark({
+            item: fullDataItemFromId,
+            datasetId,
+          })
+        );
   };
 
   return (
