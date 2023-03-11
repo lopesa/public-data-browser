@@ -49,7 +49,8 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
     }
     const extension = getFileExtension(url);
     const shouldOfferPreviewData =
-      typeof extension === "string" && extension.includes("csv");
+      typeof extension === "string" &&
+      (extension.includes("csv") || extension.includes("xls"));
 
     // return shouldOfferPreviewData && <ChartDialog chartItemUrl={url} />;
     // return shouldOfferPreviewData && <PreviewData url={url} />;

@@ -1,7 +1,6 @@
-import DataItemDialog from "components/DataItemDialog";
 import DataItemsAccordion from "components/DataItemsAccordion";
 import { useEffect, useMemo, useState } from "react";
-import PageScrollSpy from "components/PageScrollSpy";
+// import PageScrollSpy from "components/PageScrollSpy";
 import DatasetIndex, {
   getDatasetGetAllMethod,
   getDatasetEndpointName,
@@ -19,9 +18,11 @@ interface IndexDataListProps {
 }
 
 function IndexDataList({ datasetId }: IndexDataListProps) {
-  const PAGE_LENGTH = 300;
-  const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
-  const [showOnlyWithXml, setShowOnlyWithXml] = useState(false);
+  // const PAGE_LENGTH = 300;
+  // const [lastIndex, setLastIndex] = useState(PAGE_LENGTH);
+  const [showXml, setShowXml] = useState(false);
+  const [showXls, setShowXls] = useState(false);
+  const [showCsv, setShowCsv] = useState(false);
   const [openAllAccordions, setOpenAllAccordions] = useState(false);
   const dispatch = useAppDispatch();
   let method = getDatasetGetAllMethod(datasetId);
@@ -35,32 +36,52 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
 
   // adapted from here: https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced#selecting-values-from-results
 
-  // @TODO: this is only sort of working now that I added in the
-  // imperative dispatch in the hook above.
   const selectPaginatedDataItems = useMemo(() => {
     // Return a unique selector instance for this page so that
     // the filtered results are correctly memoized
     return createSelector(
       (res: typeof data) => res,
       // (res: typeof data, lastIndex: number) => lastIndex,
-      (res: typeof data, showOnlyWithXml: boolean) => showOnlyWithXml,
-      // (res, lastIndex, showOnlyWithXml) => {
-      (res, showOnlyWithXml) => {
+      (res: typeof data, showXml: boolean) => showXml,
+      (res: typeof data, showXml: boolean, showCsv: boolean) => showCsv,
+      (
+        res: typeof data,
+        showXml: boolean,
+        showCsv: boolean,
+        showXls: boolean
+      ) => showXls,
+      (res, showXml, showCsv, showXls) => {
         if (!res) {
           return [];
         }
 
-        // let returnVal = res.data?.slice(0, lastIndex);
         let returnVal = res.data;
-        if (!showOnlyWithXml) {
+
+        type DataType = "xml" | "csv" | "xls";
+        const includesArray: DataType[] = [];
+        if (showXml) {
+          includesArray.push("xml");
+        }
+        if (showCsv) {
+          includesArray.push("csv");
+        }
+        if (showXls) {
+          includesArray.push("xls");
+        }
+
+        if (!includesArray.length) {
           return returnVal;
         }
         return returnVal.filter((item: any) => {
           if (!item.dataTypesByFileExtension?.length) {
             return false;
           }
-          return item.dataTypesByFileExtension.includes("csv");
-          // return !!item.spatialData;
+          for (let i = 0; i < includesArray.length; i++) {
+            if (item.dataTypesByFileExtension.includes(includesArray[i])) {
+              return true;
+            }
+          }
+          return false;
         });
       }
     );
@@ -72,7 +93,9 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
       filteredDataItems: selectPaginatedDataItems(
         result.data,
         // lastIndex,
-        showOnlyWithXml
+        showXml,
+        showCsv,
+        showXls
       ),
     }),
   });
@@ -103,33 +126,25 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         </h4>
       )}
       <div className={styles.CheckboxGroupContainer}>
-        <PDBCheckbox
-          label="Show only items with csv"
-          onCheckedChange={setShowOnlyWithXml}
-        />
+        <PDBCheckbox label="Show items with Xml" onCheckedChange={setShowXml} />
+        <PDBCheckbox label="Show items with Xls" onCheckedChange={setShowXls} />
+        <PDBCheckbox label="Show items with CSV" onCheckedChange={setShowCsv} />
         <PDBCheckbox
           label="Open all accordions"
           onCheckedChange={setOpenAllAccordions}
         />
       </div>
       {isLoading && <div>Loading...</div>}
-      {isFetching && <div>Fetching...</div>}
+      {/* {isFetching && <div>Fetching...</div>} */}
       {/* {isError && <div>isError...</div>}
       {error && <div>error...</div>} */}
-      {
-        // (filteredDataItems as typeof data) && (
-        filteredDataItems && (
-          <DataItemsAccordion
-            dataItems={filteredDataItems}
-            datasetId={datasetId}
-            openAll={openAllAccordions}
-          />
-        )
-
-        // filteredDataItems?.map((item: any, index: number) => (
-        //   <DataItemDialog key={index} dataItem={item} datasetId={datasetId} />
-        // ))
-      }
+      {filteredDataItems && (
+        <DataItemsAccordion
+          dataItems={filteredDataItems}
+          datasetId={datasetId}
+          openAll={openAllAccordions}
+        />
+      )}
       {error && (
         <div>
           Error:{" "}
@@ -139,14 +154,14 @@ function IndexDataList({ datasetId }: IndexDataListProps) {
         </div>
       )}
       {error && <div>Error: {`${error} || error getting data`}</div>}
-      <PageScrollSpy
+      {/* <PageScrollSpy
         pixelsToBottom={300}
         scrollEvent={(closeToBottom) => {
           if (closeToBottom) {
             setLastIndex(lastIndex + PAGE_LENGTH);
           }
         }}
-      />
+      /> */}
     </div>
   );
 }

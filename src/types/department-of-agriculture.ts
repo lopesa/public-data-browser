@@ -56,12 +56,6 @@ export type DepartmentOfAgricultureDataItem = {
   isPartOf?: string;
 };
 
-export type DepartmentOfAgricultureDataItemDetail = {
-  description: string;
-  title: string;
-  id: string;
-};
-
 export type DepartmentOfAgriculture = {
   dataset: DepartmentOfAgricultureDataItem[];
 };

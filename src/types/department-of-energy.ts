@@ -56,12 +56,6 @@ export type DepartmentOfEnergyDataItem = {
   isPartOf?: string;
 };
 
-export type DepartmentOfEnergyDataItemDetail = {
-  description: string;
-  title: string;
-  id: string;
-};
-
 export type DepartmentOfEnergy = {
   dataset: DepartmentOfEnergyDataItem[];
 };

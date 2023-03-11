@@ -1,5 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from "../features/counter/counterSlice";
+import bookmarksReducer from "../features/bookmarksSlice";
 
 // import { setupListeners } from '@reduxjs/toolkit/query'
 import { apiSlice } from "services/apiSlice";
@@ -7,6 +8,7 @@ import { apiSlice } from "services/apiSlice";
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    bookmarks: bookmarksReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,

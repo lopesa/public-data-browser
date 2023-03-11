@@ -1,3 +1,6 @@
+import { DepartmentOfAgricultureDataItem } from "./department-of-agriculture";
+import { DepartmentOfEnergyDataItem } from "./department-of-energy";
+
 export type InitialIndexDataItem = {
   id: string;
   title: string;
@@ -17,3 +20,7 @@ export type SpreadsheetData = {
   totalRows: number;
   data: string[][];
 };
+
+export type FullDataItem =
+  | DepartmentOfAgricultureDataItem
+  | DepartmentOfEnergyDataItem;
