@@ -1,15 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DatasetsAvailable } from "types/dataset-index-type";
 import { InitialIndexDataItem } from "types/types-general";
-import { AppThunk, RootState } from "../app/store";
-
-type BookmarkValue = {
-  item: InitialIndexDataItem;
-  datasetId: DatasetsAvailable;
-};
+import { RootState } from "../app/store";
 
 export interface BookmarksState {
-  value: BookmarkValue[];
+  value: InitialIndexDataItem[];
   status: "idle" | "loading" | "failed";
 }
 
@@ -24,16 +18,16 @@ export const bookmarksSlice = createSlice({
   reducers: {
     addBookmark: (
       state: BookmarksState,
-      action: PayloadAction<BookmarkValue>
+      action: PayloadAction<InitialIndexDataItem>
     ) => {
       state.value.push(action.payload);
     },
     removeBookmark: (
       state: BookmarksState,
-      action: PayloadAction<BookmarkValue>
+      action: PayloadAction<InitialIndexDataItem>
     ) => {
       state.value = state.value.filter(
-        (bookmark) => bookmark.item.id !== action.payload.item.id
+        (bookmark) => bookmark.id !== action.payload.id
       );
     },
   },

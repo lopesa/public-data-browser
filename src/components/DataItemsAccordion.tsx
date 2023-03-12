@@ -4,11 +4,8 @@ import {
   BookmarkIcon,
   BookmarkFilledIcon,
 } from "@radix-ui/react-icons";
-import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
-import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
 import styles from "styles/DataItemsAccordion.module.scss";
 import { useEffect, useState } from "react";
-import DOMPurify from "dompurify";
 import DataItemDialog from "./DataItemDialog";
 import { DatasetsAvailable } from "types/dataset-index-type";
 import { InitialIndexDataItem } from "types/types-general";
@@ -27,7 +24,6 @@ interface DataItemsAccordionProps {
 
 const DataItemsAccordion = ({
   dataItems,
-  datasetId,
   openAll,
 }: DataItemsAccordionProps) => {
   const [value, setValue] = useState<string[]>([]);
@@ -43,7 +39,7 @@ const DataItemsAccordion = ({
   }, [dataItems, openAll]);
 
   const isBookmarked = (id: string) => {
-    return bookmarks.find((bookmark) => bookmark.item.id === id);
+    return bookmarks.find((bookmark) => bookmark.id === id);
   };
 
   const onClickBookmark = (e: React.MouseEvent<SVGElement>) => {
@@ -57,13 +53,8 @@ const DataItemsAccordion = ({
       return;
     }
     isBookmarked(id)
-      ? dispatch(removeBookmark({ item: fullDataItemFromId, datasetId }))
-      : dispatch(
-          addBookmark({
-            item: fullDataItemFromId,
-            datasetId,
-          })
-        );
+      ? dispatch(removeBookmark(fullDataItemFromId))
+      : dispatch(addBookmark(fullDataItemFromId));
   };
 
   return (
@@ -98,7 +89,7 @@ const DataItemsAccordion = ({
               <DataItemDialog
                 key={index}
                 dataItem={dataItem}
-                datasetId={datasetId}
+                datasetId={DatasetsAvailable.departmentOfAgriculture}
               />
             </Accordion.Content>
           </Accordion.Item>

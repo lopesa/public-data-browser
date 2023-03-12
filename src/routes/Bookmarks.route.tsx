@@ -1,8 +1,10 @@
-import DatasetSelector from "components/DatasetSelector";
 import IndexDataList from "components/IndexDataList";
 import styles from "styles/Bookmarks.module.scss";
+import { selectBookmarks } from "features/bookmarksSlice";
+import { useSelector } from "react-redux";
 
 export default function Bookmarks() {
+  const data = useSelector(selectBookmarks);
   return (
     // <div>Bookmarks</div>
     <div className={styles.MainContainer}>
@@ -10,7 +12,7 @@ export default function Bookmarks() {
           onSelect={onSelect}
           triggerClassName={styles.DatasetSelector}
         /> */}
-      {/* <IndexDataList datasetId="BOOKMARKS"} /> */}
+      {data && <IndexDataList data={data} />}
     </div>
   );
 }

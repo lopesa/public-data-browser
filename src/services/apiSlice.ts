@@ -6,7 +6,7 @@ import {
 import { DatasetsAvailable } from "types/dataset-index-type";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
-import { InitialIndexData, SpreadsheetData } from "types/types-general";
+import { InitialIndexData, SpreadsheetData, User } from "types/types-general";
 
 const BASE_URL = "http://localhost:3001";
 
@@ -85,6 +85,25 @@ export const apiSlice = createApi({
         url: `/get-spreadsheet-data/${encodeURIComponent(url)}`,
       }),
     }),
+    loginUser: builder.query<User, { user: string; pass: string }>({
+      query: ({ user, pass }) => ({
+        url: "/user/login",
+        method: "POST",
+        body: { user, pass },
+      }),
+      transformResponse: (baseQueryReturnValue: User, meta) => {
+        debugger;
+        return {
+          // email: meta.user
+          ...baseQueryReturnValue,
+        };
+        // return addDatasetId(
+        //   baseQueryReturnValue,
+        //   meta,
+        //   DatasetsAvailable.departmentOfEnergy
+        // );
+      },
+    }),
   }),
 });
 
@@ -96,4 +115,6 @@ export const {
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
   useGetSpreadsheetDataQuery,
+  useLoginUserQuery,
+  useLazyLoginUserQuery,
 } = apiSlice;

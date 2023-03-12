@@ -24,6 +24,13 @@ export type SpreadsheetData = {
   data: string[][];
 };
 
+export type User = {
+  id?: string;
+  name?: string;
+  token: string;
+  email?: string;
+};
+
 export type FullDataItem =
   | DepartmentOfAgricultureDataItem
   | DepartmentOfEnergyDataItem;
