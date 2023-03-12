@@ -1,9 +1,31 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery,
+  FetchBaseQueryMeta,
+} from "@reduxjs/toolkit/query/react";
+import { DatasetsAvailable } from "types/dataset-index-type";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
 import { InitialIndexData, SpreadsheetData } from "types/types-general";
 
 const BASE_URL = "http://localhost:3001";
+
+const addDatasetId = (
+  baseQueryReturnValue: InitialIndexData,
+  meta?: FetchBaseQueryMeta,
+  datasetId?: DatasetsAvailable
+) => {
+  const newData = baseQueryReturnValue.data.map((item) => {
+    return {
+      ...item,
+      datasetId: datasetId,
+    };
+  });
+  return {
+    ...baseQueryReturnValue,
+    data: newData,
+  };
+};
 
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
@@ -12,7 +34,6 @@ export const apiSlice = createApi({
     baseUrl: BASE_URL,
   }),
   tagTypes: ["DepartmentOfAgricultureGetAll", "DepartmentOfEnergyGetAll"],
-  // refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     getBaseDepartmentOfAgricultureDataAll: builder.query<
       InitialIndexData,
@@ -21,6 +42,13 @@ export const apiSlice = createApi({
       query: () => ({
         url: "/department-of-agriculture",
       }),
+      transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
+        return addDatasetId(
+          baseQueryReturnValue,
+          meta,
+          DatasetsAvailable.departmentOfAgriculture
+        );
+      },
       providesTags: ["DepartmentOfAgricultureGetAll"],
     }),
     getDepartmentOfAgricultureDataById: builder.query<
@@ -35,6 +63,13 @@ export const apiSlice = createApi({
       query: () => ({
         url: "/department-of-energy",
       }),
+      transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
+        return addDatasetId(
+          baseQueryReturnValue,
+          meta,
+          DatasetsAvailable.departmentOfEnergy
+        );
+      },
       providesTags: ["DepartmentOfEnergyGetAll"],
     }),
     getDepartmentOfEnergyDataById: builder.query<

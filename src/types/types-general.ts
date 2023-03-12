@@ -1,7 +1,10 @@
 import { DepartmentOfAgricultureDataItem } from "./department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "./department-of-energy";
 
+import { DatasetsAvailable } from "types/dataset-index-type";
+
 export type InitialIndexDataItem = {
+  datasetId?: DatasetsAvailable;
   id: string;
   title: string;
   dataTypesByFileExtension?: string[];
