@@ -8,6 +8,8 @@ import DatasetIndex from "services/dataset-index";
 import { useState } from "react";
 import { DatasetsAvailable } from "types/dataset-index-type";
 import styles from "styles/DatasetSelector.module.scss";
+import { selectDatasetSelected } from "app/DatasetSelected.slice";
+import { useSelector } from "react-redux";
 
 interface DatasetSelectorProps {
   onSelect: (value: DatasetsAvailable) => void;
@@ -18,11 +20,13 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
   onSelect,
   triggerClassName,
 }: DatasetSelectorProps) => {
-  const [selectedDataset, setSelectedDataset] = useState<DatasetsAvailable>();
+  const activeDataset = useSelector(selectDatasetSelected);
   return (
     <Select.Root onValueChange={onSelect}>
       <Select.Trigger className={`${triggerClassName} ${styles.SelectTrigger}`}>
-        <Select.Value placeholder="Select a dataset…" />
+        <Select.Value
+          placeholder={activeDataset ? activeDataset : "Select a dataset…"}
+        />
         <Select.Icon className={styles.SelectIcon}>
           <ChevronDownIcon />
         </Select.Icon>

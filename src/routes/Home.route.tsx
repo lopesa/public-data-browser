@@ -10,13 +10,20 @@ import DatasetIndex, {
 import { useAppDispatch } from "app/hooks";
 import { apiSlice } from "services/apiSlice";
 import { InitialIndexData, InitialIndexDataItem } from "types/types-general";
+import {
+  selectDatasetSelected,
+  setDatasetSelected,
+} from "app/DatasetSelected.slice";
+import { useSelector } from "react-redux";
 
 export default function Home() {
-  const [activeDataset, setActiveDataset] = useState<DatasetsAvailable>();
+  const activeDataset = useSelector(selectDatasetSelected);
+  // const [activeDataset, setActiveDataset] = useState<DatasetsAvailable>();
   const [data, setData] = useState<InitialIndexData>();
   const dispatch = useAppDispatch();
   const onSelect = (value: DatasetsAvailable) => {
-    setActiveDataset(value);
+    // setActiveDataset(value);
+    dispatch(setDatasetSelected(value));
   };
 
   useEffect(() => {
