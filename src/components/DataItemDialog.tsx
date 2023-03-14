@@ -37,10 +37,11 @@ const onClickDownloadXls = (e: React.MouseEvent<HTMLButtonElement>) => {
 
 const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
   const [skip, setSkip] = useState(true);
-  const { data, error, isLoading } = DatasetIndex[datasetId].getById(
-    dataItem.id,
-    { skip }
-  );
+  // @TODO default to departmentOfAgriculture if not datasetId
+  // make the prop not optionally undefined
+  const { data, error, isLoading } = DatasetIndex[
+    dataItem.datasetId || DatasetsAvailable.departmentOfAgriculture
+  ].getById(dataItem.id, { skip });
 
   const getPreviewDataLink = (distributionItem: DistributionItems) => {
     const url = distributionItem?.downloadURL || distributionItem?.accessURL;

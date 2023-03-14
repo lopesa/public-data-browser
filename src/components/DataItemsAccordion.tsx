@@ -15,6 +15,13 @@ import {
   selectBookmarks,
 } from "features/bookmarksSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import PDBAlert from "components/PDBAlert";
+import {
+  setHasSeenMakeAccountSuggestionDialog,
+  selectHasSeenMakeAccountSuggestionDialog,
+} from "app/User.slice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface DataItemsAccordionProps {
   dataItems: InitialIndexDataItem[];
@@ -27,8 +34,13 @@ const DataItemsAccordion = ({
   openAll,
 }: DataItemsAccordionProps) => {
   const [value, setValue] = useState<string[]>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   const dispatch = useAppDispatch();
   const bookmarks = useAppSelector(selectBookmarks);
+  const hasSeenMakeAccountSuggestionDialog = useSelector(
+    selectHasSeenMakeAccountSuggestionDialog
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (openAll) {
@@ -44,6 +56,10 @@ const DataItemsAccordion = ({
 
   const onClickBookmark = (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
+    if (!hasSeenMakeAccountSuggestionDialog) {
+      setAlertOpen(true);
+      dispatch(setHasSeenMakeAccountSuggestionDialog(true));
+    }
     const id = e.currentTarget.dataset.itemId;
     if (!id) {
       return;
@@ -58,43 +74,53 @@ const DataItemsAccordion = ({
   };
 
   return (
-    <Accordion.Root
-      type="multiple"
-      className={styles.AccordionRoot}
-      value={value}
-      onValueChange={setValue}
-    >
-      {dataItems?.length &&
-        dataItems.map((dataItem, index) => (
-          <Accordion.Item key={index} value={dataItem.id}>
-            <Accordion.Header>
-              <Accordion.Trigger className={styles.AccordionTrigger}>
-                {isBookmarked(dataItem.id) ? (
-                  <BookmarkFilledIcon
-                    data-item-id={dataItem.id}
-                    onClick={onClickBookmark}
-                  />
-                ) : (
-                  <BookmarkIcon
-                    data-item-id={dataItem.id}
-                    onClick={onClickBookmark}
-                  />
-                )}
-                <ChevronDownIcon />
-                {dataItem.title}
-              </Accordion.Trigger>
-            </Accordion.Header>
-            <Accordion.Content className={styles.AccordionContent}>
-              <div>{dataItem.description}</div>
-              <DataItemDialog
-                key={index}
-                dataItem={dataItem}
-                datasetId={DatasetsAvailable.departmentOfAgriculture}
-              />
-            </Accordion.Content>
-          </Accordion.Item>
-        ))}
-    </Accordion.Root>
+    <>
+      <PDBAlert
+        open={alertOpen}
+        title="Do you want to login or create a free account to persist/retrieve your bookmarks?"
+        cancelText="No Thanks"
+        actionText="Yes"
+        action={() => navigate("/bookmarks")}
+        cancelAction={() => setAlertOpen(false)}
+      />
+      <Accordion.Root
+        type="multiple"
+        className={styles.AccordionRoot}
+        value={value}
+        onValueChange={setValue}
+      >
+        {dataItems?.length &&
+          dataItems.map((dataItem, index) => (
+            <Accordion.Item key={index} value={dataItem.id}>
+              <Accordion.Header>
+                <Accordion.Trigger className={styles.AccordionTrigger}>
+                  {isBookmarked(dataItem.id) ? (
+                    <BookmarkFilledIcon
+                      data-item-id={dataItem.id}
+                      onClick={onClickBookmark}
+                    />
+                  ) : (
+                    <BookmarkIcon
+                      data-item-id={dataItem.id}
+                      onClick={onClickBookmark}
+                    />
+                  )}
+                  <ChevronDownIcon />
+                  {dataItem.title}
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content className={styles.AccordionContent}>
+                <div>{dataItem.description}</div>
+                <DataItemDialog
+                  key={index}
+                  dataItem={dataItem}
+                  datasetId={DatasetsAvailable.departmentOfAgriculture}
+                />
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+      </Accordion.Root>
+    </>
   );
 };
 
