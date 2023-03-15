@@ -43,7 +43,11 @@ const LoginSignupAlert = ({
             </AlertDialog.Description>
           )} */}
           <div style={{ display: "flex", gap: 25, flexDirection: "column" }}>
-            <UserPasswordForm />
+            <UserPasswordForm
+              onSuccess={() => {
+                parentOpenSetter(false);
+              }}
+            />
             <Separator.Root
               className="SeparatorRoot"
               style={{ margin: "15px", backgroundColor: "grey", height: "1px" }}

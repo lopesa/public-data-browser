@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
+import { apiSlice } from "services/apiSlice";
 
 export interface UserState {
   email?: string;
@@ -29,6 +30,16 @@ export const userSlice = createSlice({
       state.token = action.payload.token;
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      apiSlice.endpoints.loginUser.matchFulfilled,
+      (state, action) => {
+        debugger;
+        state.email = action.payload.email;
+        state.token = action.payload.token;
+      }
+    );
+  },
 });
 
 export const { setHasSeenMakeAccountSuggestionDialog, setEmailAndToken } =
@@ -36,5 +47,6 @@ export const { setHasSeenMakeAccountSuggestionDialog, setEmailAndToken } =
 export const selectHasSeenMakeAccountSuggestionDialog = (state: RootState) =>
   state.user.hasSeenMakeAccountSuggestionDialog;
 export const selectEmail = (state: RootState) => state.user.email;
+export const selectToken = (state: RootState) => state.user.token;
 
 export default userSlice.reducer;

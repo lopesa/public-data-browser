@@ -86,25 +86,12 @@ export const apiSlice = createApi({
         url: `/get-spreadsheet-data/${encodeURIComponent(url)}`,
       }),
     }),
-    loginUser: builder.mutation<User, { email: string; password: string }>({
+    loginUser: builder.query<User, { email: string; password: string }>({
       query: ({ email, password }) => ({
         url: "/user/login",
         method: "POST",
         body: { email, password },
       }),
-      transformResponse: async (baseQueryReturnValue: User, meta) => {
-        debugger;
-        const test = await meta?.request?.body?.getReader().read();
-        return {
-          // email: meta.user
-          ...baseQueryReturnValue,
-        };
-        // return addDatasetId(
-        //   baseQueryReturnValue,
-        //   meta,
-        //   DatasetsAvailable.departmentOfEnergy
-        // );
-      },
     }),
   }),
 });
@@ -117,5 +104,5 @@ export const {
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
   useGetSpreadsheetDataQuery,
-  useLoginUserMutation,
+  useLazyLoginUserQuery,
 } = apiSlice;
