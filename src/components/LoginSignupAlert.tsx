@@ -27,9 +27,6 @@ const LoginSignupAlert = ({
   }, [parentOpenFlag]);
   return (
     <AlertDialog.Root open={open}>
-      {/* <AlertDialog.Trigger asChild>
-      <button className="Button violet">Delete account</button>
-    </AlertDialog.Trigger> */}
       <AlertDialog.Portal>
         <AlertDialog.Overlay className={styles.AlertDialogOverlay} />
         <AlertDialog.Content className={styles.AlertDialogContent}>
@@ -37,11 +34,6 @@ const LoginSignupAlert = ({
             Login or create a free account to persist and retrieve your
             bookmarks?
           </AlertDialog.Title>
-          {/* {description && (
-            <AlertDialog.Description className={styles.AlertDialogDescription}>
-              {description}
-            </AlertDialog.Description>
-          )} */}
           <div style={{ display: "flex", gap: 25, flexDirection: "column" }}>
             <UserPasswordForm
               onSuccess={() => {
@@ -53,21 +45,10 @@ const LoginSignupAlert = ({
               style={{ margin: "15px", backgroundColor: "grey", height: "1px" }}
             />
             <AlertDialog.Cancel asChild>
-              <button
-                onClick={cancelAction}
-                className={`${styles.Button} ${styles.mauve}`}
-              >
+              <button onClick={cancelAction} className={styles.Button}>
                 No Thanks
               </button>
             </AlertDialog.Cancel>
-            {/* <AlertDialog.Action asChild>
-              <button
-                onClick={action}
-                className={`${styles.Button} ${styles.red}`}
-              >
-                {actionText}
-              </button>
-            </AlertDialog.Action> */}
           </div>
         </AlertDialog.Content>
       </AlertDialog.Portal>

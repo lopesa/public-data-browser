@@ -31,14 +31,23 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      apiSlice.endpoints.loginUser.matchFulfilled,
-      (state, action) => {
-        debugger;
-        state.email = action.payload.email;
-        state.token = action.payload.token;
-      }
-    );
+    builder
+      .addMatcher(
+        apiSlice.endpoints.loginUser.matchFulfilled,
+        (state, action) => {
+          debugger;
+          state.email = action.payload.email;
+          state.token = action.payload.token;
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.createUser.matchFulfilled,
+        (state, action) => {
+          debugger;
+          state.email = action.payload.email;
+          state.token = action.payload.token;
+        }
+      );
   },
 });
 

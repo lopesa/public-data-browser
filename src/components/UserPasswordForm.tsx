@@ -1,6 +1,9 @@
 import * as Form from "@radix-ui/react-form";
 import styles from "styles/UserPasswordForm.module.scss";
-import { useLazyLoginUserQuery } from "services/apiSlice";
+import {
+  useLazyLoginUserQuery,
+  useCreateUserMutation,
+} from "services/apiSlice";
 import { useState } from "react";
 
 interface UserPasswordFormProps {
@@ -12,10 +15,10 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
     loginUser,
     { data: userData, error: loginError, isLoading: loginIsLoading },
   ] = useLazyLoginUserQuery();
-  const [serverErrors, setServerErrors] = useState({
-    email: false,
-    password: false,
-  });
+  const [createUser, { isLoading: createIsLoading, error: createError }] =
+    useCreateUserMutation();
+  const [serverError, setServerError] = useState(false);
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const submitType = (event.nativeEvent as SubmitEvent).submitter?.dataset
@@ -24,11 +27,13 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
       email: string;
       password: string;
     };
-    const method = submitType === "login" ? loginUser : loginUser;
+    const method = submitType === "login" ? loginUser : createUser;
     const result = await method(formData)
       .unwrap()
       .catch((error) => {
+        setServerError(true);
         // @TODO: setServerErrors, after getting a better response back from the server
+        // actually, keeping this simple for now, just showing a generic error message
       });
     if (result?.token) {
       onSuccess();
@@ -38,10 +43,12 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
     <Form.Root className={styles.FormRoot} onSubmit={onSubmit}>
       {loginIsLoading && <div>Loading...</div>}
       {loginError && <div>Error: </div>}
+      {createIsLoading && <div>Loading...</div>}
+      {createError && <div>Error: </div>}
       <Form.Field
         className={styles.FormField}
         name="email"
-        serverInvalid={serverErrors.email}
+        serverInvalid={serverError}
       >
         <div
           style={{
@@ -79,6 +86,15 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
           <input className={styles.Input} type="password" required />
         </Form.Control>
       </Form.Field>
+
+      {serverError && (
+        <div className={styles.FormMessage}>
+          Sorry, there was a problem creating your account. Consider trying
+          logging in with the email you are trying, in case you already have an
+          account, or just trying again.
+        </div>
+      )}
+
       <Form.Submit asChild>
         <button
           data-submit-type="login"

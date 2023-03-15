@@ -93,6 +93,13 @@ export const apiSlice = createApi({
         body: { email, password },
       }),
     }),
+    createUser: builder.mutation<User, { email: string; password: string }>({
+      query: ({ email, password }) => ({
+        url: "/user/signup",
+        method: "POST",
+        body: { email, password },
+      }),
+    }),
   }),
 });
 
@@ -105,4 +112,5 @@ export const {
   useGetDepartmentOfEnergyDataByIdQuery,
   useGetSpreadsheetDataQuery,
   useLazyLoginUserQuery,
+  useCreateUserMutation,
 } = apiSlice;
