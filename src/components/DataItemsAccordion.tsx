@@ -15,7 +15,7 @@ import {
   selectBookmarks,
 } from "features/bookmarksSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import PDBAlert from "components/PDBAlert";
+import LoginSignupAlert from "components/LoginSignupAlert";
 import {
   setHasSeenMakeAccountSuggestionDialog,
   selectHasSeenMakeAccountSuggestionDialog,
@@ -56,10 +56,10 @@ const DataItemsAccordion = ({
 
   const onClickBookmark = (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
-    if (!hasSeenMakeAccountSuggestionDialog) {
-      setAlertOpen(true);
-      dispatch(setHasSeenMakeAccountSuggestionDialog(true));
-    }
+    // if (!hasSeenMakeAccountSuggestionDialog) {
+    setAlertOpen(true);
+    // dispatch(setHasSeenMakeAccountSuggestionDialog(true));
+    // }
     const id = e.currentTarget.dataset.itemId;
     if (!id) {
       return;
@@ -75,13 +75,9 @@ const DataItemsAccordion = ({
 
   return (
     <>
-      <PDBAlert
-        open={alertOpen}
-        title="Do you want to login or create a free account to persist/retrieve your bookmarks?"
-        cancelText="No Thanks"
-        actionText="Yes"
-        action={() => navigate("/bookmarks")}
-        cancelAction={() => setAlertOpen(false)}
+      <LoginSignupAlert
+        parentOpenFlag={alertOpen}
+        parentOpenSetter={setAlertOpen}
       />
       <Accordion.Root
         type="multiple"

@@ -7,6 +7,7 @@ import { DatasetsAvailable } from "types/dataset-index-type";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
 import { InitialIndexData, SpreadsheetData, User } from "types/types-general";
+import { setEmailAndToken } from "app/User.slice";
 
 const BASE_URL = "http://localhost:3001";
 
@@ -85,14 +86,15 @@ export const apiSlice = createApi({
         url: `/get-spreadsheet-data/${encodeURIComponent(url)}`,
       }),
     }),
-    loginUser: builder.query<User, { user: string; pass: string }>({
-      query: ({ user, pass }) => ({
+    loginUser: builder.mutation<User, { email: string; password: string }>({
+      query: ({ email, password }) => ({
         url: "/user/login",
         method: "POST",
-        body: { user, pass },
+        body: { email, password },
       }),
-      transformResponse: (baseQueryReturnValue: User, meta) => {
+      transformResponse: async (baseQueryReturnValue: User, meta) => {
         debugger;
+        const test = await meta?.request?.body?.getReader().read();
         return {
           // email: meta.user
           ...baseQueryReturnValue,
@@ -115,6 +117,5 @@ export const {
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
   useGetSpreadsheetDataQuery,
-  useLoginUserQuery,
-  useLazyLoginUserQuery,
+  useLoginUserMutation,
 } = apiSlice;

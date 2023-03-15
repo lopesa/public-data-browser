@@ -21,11 +21,20 @@ export const userSlice = createSlice({
     ) => {
       state.hasSeenMakeAccountSuggestionDialog = action.payload;
     },
+    setEmailAndToken: (
+      state: UserState,
+      action: PayloadAction<{ email: string; token: string }>
+    ) => {
+      state.email = action.payload.email;
+      state.token = action.payload.token;
+    },
   },
 });
 
-export const { setHasSeenMakeAccountSuggestionDialog } = userSlice.actions;
+export const { setHasSeenMakeAccountSuggestionDialog, setEmailAndToken } =
+  userSlice.actions;
 export const selectHasSeenMakeAccountSuggestionDialog = (state: RootState) =>
   state.user.hasSeenMakeAccountSuggestionDialog;
+export const selectEmail = (state: RootState) => state.user.email;
 
 export default userSlice.reducer;

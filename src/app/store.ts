@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
+// import counterReducer from "../features/counter/counterSlice";
 import bookmarksReducer from "../features/bookmarksSlice";
 import datasetSelectedReducer from "app/DatasetSelected.slice";
 import userReducer from "app/User.slice";
@@ -9,7 +9,7 @@ import { apiSlice } from "services/apiSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    // counter: counterReducer,
     bookmarks: bookmarksReducer,
     datasetSelected: datasetSelectedReducer,
     user: userReducer,
