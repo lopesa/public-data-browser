@@ -103,10 +103,10 @@ const DataItemsAccordion = ({
 
   const onClickBookmark = async (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
-    // if (!hasSeenMakeAccountSuggestionDialog) {
-    setAlertOpen(true);
-    // dispatch(setHasSeenMakeAccountSuggestionDialog(true));
-    // }
+    if (!hasSeenMakeAccountSuggestionDialog) {
+      setAlertOpen(true);
+      dispatch(setHasSeenMakeAccountSuggestionDialog(true));
+    }
     const id = e.currentTarget.dataset.itemId;
     if (!id) {
       return;
@@ -124,6 +124,7 @@ const DataItemsAccordion = ({
       //   })
       //   debugger
       // }
+      // if (!isBookmarked(id)) {
       if (!isBookmarked(id)) {
         const bookmarks = [
           { dataItemUuid: id, datasetId: fullDataItemFromId.datasetId },
@@ -152,11 +153,19 @@ const DataItemsAccordion = ({
     }
   };
 
-  function isInitialBookmarkIndexDataItem(
+  const isInitialBookmarkIndexDataItem = (
     indexItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
-  ): indexItem is InitialBookmarkIndexDataItem {
+  ): indexItem is InitialBookmarkIndexDataItem => {
     return (indexItem as InitialBookmarkIndexDataItem).originalId !== undefined;
-  }
+  };
+
+  const usableBookmarkId = (
+    dataItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
+  ) => {
+    return isInitialBookmarkIndexDataItem(dataItem)
+      ? dataItem.originalId
+      : dataItem.id;
+  };
 
   return (
     <>
@@ -175,7 +184,7 @@ const DataItemsAccordion = ({
             <Accordion.Item key={index} value={dataItem.id}>
               <Accordion.Header>
                 <Accordion.Trigger className={styles.AccordionTrigger}>
-                  {isBookmarked(dataItem.id) ? (
+                  {isBookmarked(usableBookmarkId(dataItem)) ? (
                     <BookmarkFilledIcon
                       data-item-id={
                         isInitialBookmarkIndexDataItem(dataItem)
@@ -190,6 +199,7 @@ const DataItemsAccordion = ({
                       onClick={onClickBookmark}
                     />
                   )}
+
                   <ChevronDownIcon />
                   {dataItem.title}
                 </Accordion.Trigger>
