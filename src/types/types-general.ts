@@ -4,7 +4,7 @@ import { DepartmentOfEnergyDataItem } from "./department-of-energy";
 import { DatasetsAvailable } from "types/dataset-index-type";
 
 export type InitialIndexDataItem = {
-  datasetId?: DatasetsAvailable;
+  datasetId: DatasetsAvailable;
   id: string;
   title: string;
   dataTypesByFileExtension?: string[];
@@ -12,6 +12,10 @@ export type InitialIndexDataItem = {
   spatialData?: boolean;
   apiData?: boolean;
 };
+
+export interface InitialBookmarkIndexDataItem extends InitialIndexDataItem {
+  originalId: string;
+}
 
 export type InitialIndexData = {
   data: InitialIndexDataItem[];

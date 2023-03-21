@@ -35,7 +35,6 @@ export const userSlice = createSlice({
       .addMatcher(
         apiSlice.endpoints.loginUser.matchFulfilled,
         (state, action) => {
-          debugger;
           state.email = action.payload.email;
           state.token = action.payload.token;
         }
@@ -43,7 +42,6 @@ export const userSlice = createSlice({
       .addMatcher(
         apiSlice.endpoints.createUser.matchFulfilled,
         (state, action) => {
-          debugger;
           state.email = action.payload.email;
           state.token = action.payload.token;
         }

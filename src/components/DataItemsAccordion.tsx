@@ -8,12 +8,21 @@ import styles from "styles/DataItemsAccordion.module.scss";
 import { useEffect, useState } from "react";
 import DataItemDialog from "./DataItemDialog";
 import { DatasetsAvailable } from "types/dataset-index-type";
-import { InitialIndexDataItem } from "types/types-general";
+import {
+  InitialBookmarkIndexDataItem,
+  InitialIndexDataItem,
+} from "types/types-general";
 import {
   addBookmark,
-  removeBookmark,
+  removeBookmark as removeBookmarkLocal,
   selectBookmarks,
 } from "features/bookmarksSlice";
+import {
+  useAddBookmarksMutation,
+  useGetBookmarksQuery,
+  useLazyGetBookmarksQuery,
+  useRemoveBookmarkMutation,
+} from "services/apiSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import LoginSignupAlert from "components/LoginSignupAlert";
 import {
@@ -22,9 +31,10 @@ import {
 } from "app/User.slice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { selectToken } from "app/User.slice";
 
 interface DataItemsAccordionProps {
-  dataItems: InitialIndexDataItem[];
+  dataItems: InitialIndexDataItem[] | InitialBookmarkIndexDataItem[];
   datasetId: DatasetsAvailable;
   openAll?: boolean;
 }
@@ -35,12 +45,45 @@ const DataItemsAccordion = ({
 }: DataItemsAccordionProps) => {
   const [value, setValue] = useState<string[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [bookmarks, setBookmarks] = useState<
+    InitialIndexDataItem[] | InitialBookmarkIndexDataItem[]
+  >(useAppSelector(selectBookmarks));
   const dispatch = useAppDispatch();
-  const bookmarks = useAppSelector(selectBookmarks);
+
+  // const bookmarks = useAppSelector(selectBookmarks);
+  // const { data, isLoading } = useGetBookmarksQuery();
   const hasSeenMakeAccountSuggestionDialog = useSelector(
     selectHasSeenMakeAccountSuggestionDialog
   );
   const navigate = useNavigate();
+  const token = useAppSelector(selectToken);
+
+  const [
+    addBookmarks,
+    { isLoading: addBookmarksIsLoading, error: addBookmarksError },
+  ] = useAddBookmarksMutation();
+
+  const [
+    removeBookmark,
+    { isLoading: removeBookmarkIsLoading, error: removeBookmarkError },
+  ] = useRemoveBookmarkMutation();
+
+  const [getBookmarks, { data, isLoading, error }] = useLazyGetBookmarksQuery();
+
+  useEffect(() => {
+    if (token) {
+      getBookmarks()
+        .unwrap()
+        .then((data) => {
+          // debugger;
+          setBookmarks(data);
+        })
+        .catch((err) => {
+          // debugger;
+          // setServerError(error);
+        });
+    }
+  }, [token, getBookmarks]);
 
   useEffect(() => {
     if (openAll) {
@@ -51,10 +94,14 @@ const DataItemsAccordion = ({
   }, [dataItems, openAll]);
 
   const isBookmarked = (id: string) => {
-    return bookmarks.find((bookmark) => bookmark.id === id);
+    return bookmarks.find((bookmark) =>
+      token
+        ? (bookmark as InitialBookmarkIndexDataItem).originalId === id
+        : bookmark.id === id
+    );
   };
 
-  const onClickBookmark = (e: React.MouseEvent<SVGElement>) => {
+  const onClickBookmark = async (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     // if (!hasSeenMakeAccountSuggestionDialog) {
     setAlertOpen(true);
@@ -64,14 +111,52 @@ const DataItemsAccordion = ({
     if (!id) {
       return;
     }
+
     const fullDataItemFromId = dataItems.find((item) => item.id === id);
     if (!fullDataItemFromId) {
       return;
     }
-    isBookmarked(id)
-      ? dispatch(removeBookmark(fullDataItemFromId))
-      : dispatch(addBookmark(fullDataItemFromId));
+
+    if (token) {
+      // if (isBookmarked(id)) {
+      //   const result = await removeBookmark(id).catch(e => {
+      //     debugger;
+      //   })
+      //   debugger
+      // }
+      if (!isBookmarked(id)) {
+        const bookmarks = [
+          { dataItemUuid: id, datasetId: fullDataItemFromId.datasetId },
+        ];
+        const result = await addBookmarks(bookmarks)
+          .unwrap()
+          .catch((error) => {
+            // debugger;
+            // setServerError(true);
+            // @TODO: setServerErrors, after getting a better response back from the server
+            // actually, keeping this simple for now, just showing a generic error message
+          });
+      } else {
+        // debugger;
+        const result = await removeBookmark(id)
+          .unwrap()
+          .catch((error) => {
+            // debugger;
+            // setServerError(true);
+          });
+      }
+    } else {
+      isBookmarked(id)
+        ? dispatch(removeBookmarkLocal(fullDataItemFromId))
+        : dispatch(addBookmark(fullDataItemFromId));
+    }
   };
+
+  function isInitialBookmarkIndexDataItem(
+    indexItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
+  ): indexItem is InitialBookmarkIndexDataItem {
+    return (indexItem as InitialBookmarkIndexDataItem).originalId !== undefined;
+  }
 
   return (
     <>
@@ -92,7 +177,11 @@ const DataItemsAccordion = ({
                 <Accordion.Trigger className={styles.AccordionTrigger}>
                   {isBookmarked(dataItem.id) ? (
                     <BookmarkFilledIcon
-                      data-item-id={dataItem.id}
+                      data-item-id={
+                        isInitialBookmarkIndexDataItem(dataItem)
+                          ? dataItem.originalId
+                          : dataItem.id
+                      }
                       onClick={onClickBookmark}
                     />
                   ) : (

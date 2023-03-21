@@ -6,15 +6,22 @@ import {
 import { DatasetsAvailable } from "types/dataset-index-type";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
-import { InitialIndexData, SpreadsheetData, User } from "types/types-general";
+import {
+  InitialBookmarkIndexDataItem,
+  InitialIndexData,
+  InitialIndexDataItem,
+  SpreadsheetData,
+  User,
+} from "types/types-general";
 import { setEmailAndToken } from "app/User.slice";
+import { RootState } from "app/store";
 
 const BASE_URL = "http://localhost:3001";
 
 const addDatasetId = (
   baseQueryReturnValue: InitialIndexData,
-  meta?: FetchBaseQueryMeta,
-  datasetId?: DatasetsAvailable
+  // meta?: FetchBaseQueryMeta,
+  datasetId: DatasetsAvailable
 ) => {
   const newData = baseQueryReturnValue.data.map((item) => {
     return {
@@ -33,6 +40,16 @@ export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).user.token;
+
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   tagTypes: ["DepartmentOfAgricultureGetAll", "DepartmentOfEnergyGetAll"],
   endpoints: (builder) => ({
@@ -46,7 +63,7 @@ export const apiSlice = createApi({
       transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
         return addDatasetId(
           baseQueryReturnValue,
-          meta,
+          // meta,
           DatasetsAvailable.departmentOfAgriculture
         );
       },
@@ -67,7 +84,7 @@ export const apiSlice = createApi({
       transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
         return addDatasetId(
           baseQueryReturnValue,
-          meta,
+          // meta,
           DatasetsAvailable.departmentOfEnergy
         );
       },
@@ -100,6 +117,32 @@ export const apiSlice = createApi({
         body: { email, password },
       }),
     }),
+    addBookmarks: builder.mutation<
+      string,
+      { dataItemUuid: string; datasetId: DatasetsAvailable }[]
+    >({
+      query: (dataItems) => ({
+        url: "bookmarks/addBookmarks",
+        method: "POST",
+        body: { bookmarks: dataItems },
+      }),
+    }),
+    removeBookmark: builder.mutation<
+      boolean,
+      string
+      // { originalId?: string; bookmarkId?: string }
+    >({
+      query: (originalId) => ({
+        url: "bookmarks/removeBookmark",
+        method: "POST",
+        body: { originalId },
+      }),
+    }),
+    getBookmarks: builder.query<InitialBookmarkIndexDataItem[], void>({
+      query: () => ({
+        url: "bookmarks",
+      }),
+    }),
   }),
 });
 
@@ -113,4 +156,8 @@ export const {
   useGetSpreadsheetDataQuery,
   useLazyLoginUserQuery,
   useCreateUserMutation,
+  useAddBookmarksMutation,
+  useRemoveBookmarkMutation,
+  useGetBookmarksQuery,
+  useLazyGetBookmarksQuery,
 } = apiSlice;
