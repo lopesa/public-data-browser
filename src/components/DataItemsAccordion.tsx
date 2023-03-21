@@ -19,7 +19,6 @@ import {
 } from "features/bookmarksSlice";
 import {
   useAddBookmarksMutation,
-  useGetBookmarksQuery,
   useLazyGetBookmarksQuery,
   useRemoveBookmarkMutation,
 } from "services/apiSlice";
@@ -46,7 +45,6 @@ const DataItemsAccordion = ({
   const localBookmarks = useAppSelector(selectBookmarks);
   const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =
     useLazyGetBookmarksQuery();
-  // const { data: remoteBookmarks, isLoading, error } = useGetBookmarksQuery();
   const [value, setValue] = useState<string[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const token = useAppSelector(selectToken);
@@ -143,6 +141,19 @@ const DataItemsAccordion = ({
     }
   };
 
+  const onSignupComplete = async () => {
+    localBookmarks &&
+      (await addBookmarks(
+        localBookmarks.map((bookmark) => {
+          return {
+            dataItemUuid: bookmark.id,
+            datasetId: bookmark.datasetId,
+          };
+        })
+      ));
+    getRemoteBookmarks();
+  };
+
   const isInitialBookmarkIndexDataItem = (
     indexItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
   ): indexItem is InitialBookmarkIndexDataItem => {
@@ -154,6 +165,7 @@ const DataItemsAccordion = ({
       <LoginSignupAlert
         parentOpenFlag={alertOpen}
         parentOpenSetter={setAlertOpen}
+        onSuccess={onSignupComplete}
       />
       <Accordion.Root
         type="multiple"
@@ -166,7 +178,11 @@ const DataItemsAccordion = ({
             <Accordion.Item key={index} value={dataItem.id}>
               <Accordion.Header>
                 <Accordion.Trigger className={styles.AccordionTrigger}>
-                  {isBookmarked(dataItem.id) ? (
+                  {isBookmarked(
+                    isInitialBookmarkIndexDataItem(dataItem)
+                      ? dataItem.originalId
+                      : dataItem.id
+                  ) ? (
                     <BookmarkFilledIcon
                       data-item-id={
                         isInitialBookmarkIndexDataItem(dataItem)

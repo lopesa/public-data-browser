@@ -14,11 +14,13 @@ type LoginSignupAlertProps = {
   // cancelAction: () => void;
   parentOpenFlag: boolean;
   parentOpenSetter: (flag: boolean) => void;
+  onSuccess?: () => void;
 };
 
 const LoginSignupAlert = ({
   parentOpenFlag,
   parentOpenSetter,
+  onSuccess,
 }: LoginSignupAlertProps) => {
   const [open, setOpen] = useState(false);
   const cancelAction = () => parentOpenSetter(false);
@@ -38,6 +40,8 @@ const LoginSignupAlert = ({
             <UserPasswordForm
               onSuccess={() => {
                 parentOpenSetter(false);
+                onSuccess?.();
+                // add local passwords to remote
               }}
             />
             <Separator.Root
