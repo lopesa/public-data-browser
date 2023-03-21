@@ -43,20 +43,20 @@ const DataItemsAccordion = ({
   dataItems,
   openAll,
 }: DataItemsAccordionProps) => {
+  const localBookmarks = useAppSelector(selectBookmarks);
+  const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =
+    useLazyGetBookmarksQuery();
+  // const { data: remoteBookmarks, isLoading, error } = useGetBookmarksQuery();
   const [value, setValue] = useState<string[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [bookmarks, setBookmarks] = useState<
-    InitialIndexDataItem[] | InitialBookmarkIndexDataItem[]
-  >(useAppSelector(selectBookmarks));
+  const token = useAppSelector(selectToken);
+  let bookmarks = token ? remoteBookmarks : localBookmarks;
   const dispatch = useAppDispatch();
 
-  // const bookmarks = useAppSelector(selectBookmarks);
-  // const { data, isLoading } = useGetBookmarksQuery();
   const hasSeenMakeAccountSuggestionDialog = useSelector(
     selectHasSeenMakeAccountSuggestionDialog
   );
   const navigate = useNavigate();
-  const token = useAppSelector(selectToken);
 
   const [
     addBookmarks,
@@ -68,22 +68,11 @@ const DataItemsAccordion = ({
     { isLoading: removeBookmarkIsLoading, error: removeBookmarkError },
   ] = useRemoveBookmarkMutation();
 
-  const [getBookmarks, { data, isLoading, error }] = useLazyGetBookmarksQuery();
-
   useEffect(() => {
     if (token) {
-      getBookmarks()
-        .unwrap()
-        .then((data) => {
-          // debugger;
-          setBookmarks(data);
-        })
-        .catch((err) => {
-          // debugger;
-          // setServerError(error);
-        });
+      getRemoteBookmarks();
     }
-  }, [token, getBookmarks]);
+  }, [token, getRemoteBookmarks]);
 
   useEffect(() => {
     if (openAll) {
@@ -94,10 +83,13 @@ const DataItemsAccordion = ({
   }, [dataItems, openAll]);
 
   const isBookmarked = (id: string) => {
-    return bookmarks.find((bookmark) =>
-      token
-        ? (bookmark as InitialBookmarkIndexDataItem).originalId === id
-        : bookmark.id === id
+    return (
+      bookmarks &&
+      bookmarks.find((bookmark) =>
+        token
+          ? (bookmark as InitialBookmarkIndexDataItem).originalId === id
+          : bookmark.id === id
+      )
     );
   };
 
@@ -107,24 +99,21 @@ const DataItemsAccordion = ({
       setAlertOpen(true);
       dispatch(setHasSeenMakeAccountSuggestionDialog(true));
     }
+
     const id = e.currentTarget.dataset.itemId;
     if (!id) {
       return;
     }
 
-    const fullDataItemFromId = dataItems.find((item) => item.id === id);
+    const fullDataItemFromId = dataItems.find((item) =>
+      isInitialBookmarkIndexDataItem(item) ? item.originalId : item.id === id
+    );
+
     if (!fullDataItemFromId) {
       return;
     }
 
     if (token) {
-      // if (isBookmarked(id)) {
-      //   const result = await removeBookmark(id).catch(e => {
-      //     debugger;
-      //   })
-      //   debugger
-      // }
-      // if (!isBookmarked(id)) {
       if (!isBookmarked(id)) {
         const bookmarks = [
           { dataItemUuid: id, datasetId: fullDataItemFromId.datasetId },
@@ -146,6 +135,7 @@ const DataItemsAccordion = ({
             // setServerError(true);
           });
       }
+      getRemoteBookmarks();
     } else {
       isBookmarked(id)
         ? dispatch(removeBookmarkLocal(fullDataItemFromId))
@@ -157,14 +147,6 @@ const DataItemsAccordion = ({
     indexItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
   ): indexItem is InitialBookmarkIndexDataItem => {
     return (indexItem as InitialBookmarkIndexDataItem).originalId !== undefined;
-  };
-
-  const usableBookmarkId = (
-    dataItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
-  ) => {
-    return isInitialBookmarkIndexDataItem(dataItem)
-      ? dataItem.originalId
-      : dataItem.id;
   };
 
   return (
@@ -184,7 +166,7 @@ const DataItemsAccordion = ({
             <Accordion.Item key={index} value={dataItem.id}>
               <Accordion.Header>
                 <Accordion.Trigger className={styles.AccordionTrigger}>
-                  {isBookmarked(usableBookmarkId(dataItem)) ? (
+                  {isBookmarked(dataItem.id) ? (
                     <BookmarkFilledIcon
                       data-item-id={
                         isInitialBookmarkIndexDataItem(dataItem)
