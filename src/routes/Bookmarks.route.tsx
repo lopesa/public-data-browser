@@ -21,7 +21,7 @@ export default function Bookmarks() {
 
   return (
     <>
-      <div>Bookmarks</div>
+      <h3>Bookmarks</h3>
       <div className={styles.MainContainer}>
         {bookmarks && <IndexDataList data={bookmarks} />}
       </div>

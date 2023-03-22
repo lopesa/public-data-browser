@@ -40,6 +40,7 @@ export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
+    timeout: 10000,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).user.token;
 

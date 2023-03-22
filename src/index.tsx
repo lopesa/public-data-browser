@@ -9,6 +9,7 @@ import Home from "./routes/Home.route";
 import Bookmarks from "./routes/Bookmarks.route";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import styles from "styles/Index.module.scss";
+import About from "routes/About.route";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "bookmarks",
         element: <Bookmarks />,
+      },
+      {
+        path: "about",
+        element: <About />,
       },
     ],
   },

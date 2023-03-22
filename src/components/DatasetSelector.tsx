@@ -1,11 +1,6 @@
 import * as Select from "@radix-ui/react-select";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import DatasetIndex from "services/dataset-index";
-import { useState } from "react";
 import { DatasetsAvailable } from "types/dataset-index-type";
 import styles from "styles/DatasetSelector.module.scss";
 import { selectDatasetSelected } from "app/DatasetSelected.slice";
@@ -30,7 +25,6 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
         <Select.Icon className={styles.SelectIcon}>
           <ChevronDownIcon />
         </Select.Icon>
-        <Select.Icon />
       </Select.Trigger>
 
       <Select.Portal>
@@ -40,7 +34,11 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
             {DatasetIndex &&
               Object.keys(DatasetIndex).map((key, index) => {
                 return (
-                  <Select.Item value={key} key={index}>
+                  <Select.Item
+                    value={key}
+                    key={index}
+                    className={styles.SelectItem}
+                  >
                     <Select.ItemText>
                       {DatasetIndex[key as DatasetsAvailable].title}
                     </Select.ItemText>

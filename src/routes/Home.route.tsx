@@ -15,11 +15,14 @@ import {
   setDatasetSelected,
 } from "app/DatasetSelected.slice";
 import { useSelector } from "react-redux";
+import { isPending } from "@reduxjs/toolkit";
 
 export default function Home() {
   const activeDataset = useSelector(selectDatasetSelected);
   // const [activeDataset, setActiveDataset] = useState<DatasetsAvailable>();
   const [data, setData] = useState<InitialIndexData>();
+  const [requestIsPending, setRequestIsPending] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<string>();
   const dispatch = useAppDispatch();
   const onSelect = (value: DatasetsAvailable) => {
     // setActiveDataset(value);
@@ -30,10 +33,22 @@ export default function Home() {
     if (!activeDataset) return;
     const datasetIndexName = getDatasetEndpointName(activeDataset);
     if (!datasetIndexName) return;
+
+    setServerError(undefined);
+    setData(undefined);
+    setRequestIsPending(true);
+
     dispatch(apiSlice.endpoints[datasetIndexName].initiate())
       .unwrap()
       .then((data) => {
+        setRequestIsPending(false);
         setData(data);
+      })
+      .catch((err) => {
+        setRequestIsPending(false);
+        setServerError(
+          err.message === "Aborted" ? "server timeout" : "server error"
+        );
       });
   }, [activeDataset, dispatch]);
 
@@ -43,6 +58,9 @@ export default function Home() {
         onSelect={onSelect}
         triggerClassName={styles.DatasetSelector}
       />
+
+      {requestIsPending && <div>Loading...</div>}
+      {serverError && <div>{serverError}</div>}
 
       {activeDataset && data && (
         <>

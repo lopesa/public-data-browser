@@ -13,6 +13,12 @@ type BookmarksProps = {
   children: React.ReactNode;
 };
 
+/**
+ *
+ * thinking to try to use this as a meta component and then acces it via
+ * context from children:
+ * https://react.dev/reference/react/createContext
+ */
 const Bookmarks = ({ children }: BookmarksProps) => {
   const localBookmarks = useAppSelector(selectBookmarks);
   const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =

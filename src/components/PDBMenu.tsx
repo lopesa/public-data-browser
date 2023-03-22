@@ -11,12 +11,15 @@ const PDBMenu = () => {
     <NavigationMenu.Root className={styles.NavigationMenuRoot}>
       <NavigationMenu.List className={styles.NavigationMenuList}>
         <NavigationMenu.Item>
-          <NavigationMenu.Trigger className={styles.NavigationMenuTrigger}>
+          <NavigationMenu.Link asChild className={styles.NavigationMenuLink}>
+            <Link to="/about">About</Link>
+          </NavigationMenu.Link>
+          {/* <NavigationMenu.Trigger className={styles.NavigationMenuTrigger}>
             About <CaretDownIcon className={styles.CaretDown} aria-hidden />
           </NavigationMenu.Trigger>
           <NavigationMenu.Content className={styles.NavigationMenuContent}>
-            I am an Engineer who needed a side project...
-          </NavigationMenu.Content>
+            
+          </NavigationMenu.Content> */}
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Link
