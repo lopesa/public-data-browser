@@ -1,17 +1,29 @@
 import IndexDataList from "components/IndexDataList";
 import styles from "styles/Bookmarks.module.scss";
 import { selectBookmarks } from "features/bookmarksSlice";
-import { useSelector } from "react-redux";
-import { useGetBookmarksQuery } from "services/apiSlice";
+import { useLazyGetBookmarksQuery } from "services/apiSlice";
+import { useAppSelector } from "app/hooks";
+import { selectToken } from "app/User.slice";
+import { useEffect } from "react";
 
 export default function Bookmarks() {
-  // const data = useSelector(selectBookmarks);
-  const { data, isLoading } = useGetBookmarksQuery();
+  const localBookmarks = useAppSelector(selectBookmarks);
+  const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =
+    useLazyGetBookmarksQuery();
+  const token = useAppSelector(selectToken);
+  let bookmarks = token ? remoteBookmarks : localBookmarks;
+
+  useEffect(() => {
+    if (token) {
+      getRemoteBookmarks();
+    }
+  }, [token, getRemoteBookmarks]);
+
   return (
     <>
       <div>Bookmarks</div>
       <div className={styles.MainContainer}>
-        {data && <IndexDataList data={data} />}
+        {bookmarks && <IndexDataList data={bookmarks} />}
       </div>
     </>
   );
