@@ -20,11 +20,18 @@ export default function Bookmarks() {
   }, [token, getRemoteBookmarks]);
 
   return (
-    <>
-      <h3>Bookmarks</h3>
-      <div className={styles.MainContainer}>
-        {bookmarks && <IndexDataList data={bookmarks} />}
-      </div>
-    </>
+    <div className={styles.MainContainer}>
+      <h3 className={styles.Title}>Bookmarks</h3>
+      {!!bookmarks?.length && <IndexDataList data={bookmarks} />}
+      {!bookmarks?.length && !token && (
+        <div className={styles.LoginCreateContainer}>
+          <p>
+            Login to get remote bookmarks, or create a new account to save
+            future bookmarks
+          </p>
+          <button>open dialog</button>
+        </div>
+      )}
+    </div>
   );
 }

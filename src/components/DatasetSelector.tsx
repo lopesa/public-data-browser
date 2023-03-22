@@ -20,7 +20,11 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
     <Select.Root onValueChange={onSelect}>
       <Select.Trigger className={`${triggerClassName} ${styles.SelectTrigger}`}>
         <Select.Value
-          placeholder={activeDataset ? activeDataset : "Select a dataset…"}
+          placeholder={
+            activeDataset
+              ? DatasetIndex[activeDataset].title
+              : "Select a dataset…"
+          }
         />
         <Select.Icon className={styles.SelectIcon}>
           <ChevronDownIcon />

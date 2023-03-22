@@ -34,7 +34,12 @@
   border-radius: 4px;
   color: var(--violet11);
   &.loggedIn {
-    color: var(--green11);
+    // color: var(--green11);
+    background-color: var(--green6);
+    color: white;
+    &:hover {
+      color: var(--violet11);
+    }
   }
   cursor: pointer;
   margin: 0 5px;

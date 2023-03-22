@@ -15,7 +15,6 @@ import {
   setDatasetSelected,
 } from "app/DatasetSelected.slice";
 import { useSelector } from "react-redux";
-import { isPending } from "@reduxjs/toolkit";
 
 export default function Home() {
   const activeDataset = useSelector(selectDatasetSelected);
@@ -47,7 +46,7 @@ export default function Home() {
       .catch((err) => {
         setRequestIsPending(false);
         setServerError(
-          err.message === "Aborted" ? "server timeout" : "server error"
+          err.message === "Aborted" ? "Server Timeout" : "Server Error"
         );
       });
   }, [activeDataset, dispatch]);
@@ -59,25 +58,29 @@ export default function Home() {
         triggerClassName={styles.DatasetSelector}
       />
 
-      {requestIsPending && <div>Loading...</div>}
-      {serverError && <div>{serverError}</div>}
+      <div className={styles.MessagesContainer}>
+        {requestIsPending && <div>Loading...</div>}
+        {serverError && <div className={styles.Error}>{serverError}</div>}
+      </div>
 
       {activeDataset && data && (
-        <>
-          <h2>Current Dataset: {DatasetIndex[activeDataset].title}</h2>
-          <h3>
+        <div className={styles.DatasetInfoContainer}>
+          <p className={styles.Bold}>
+            Current Dataset: {DatasetIndex[activeDataset].title}
+          </p>
+          <p>
             Original Discovery URL:{" "}
             <a href={data.originalIntialUrl} target="_blank" rel="noreferrer">
               {data.originalIntialUrl}
             </a>
-          </h3>
-          <h3>
+          </p>
+          <p>
             Original JSON src URL:{" "}
             <a href={data.originalJsonDataUrl} target="_blank" rel="noreferrer">
               {data.originalJsonDataUrl}
             </a>
-          </h3>
-        </>
+          </p>
+        </div>
       )}
 
       {data && <IndexDataList data={data.data} />}

@@ -2,4 +2,20 @@
   margin: 0 auto;
   max-width: 95vw;
   width: 1100px;
+
+  .Title {
+    margin: 1em auto;
+    width: fit-content;
+    padding-top: 20px;
+  }
+
+  .LoginCreateContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: center;
+  }
 }

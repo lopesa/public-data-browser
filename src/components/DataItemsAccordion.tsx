@@ -176,9 +176,28 @@ const DataItemsAccordion = ({
         {dataItems?.length &&
           dataItems.map((dataItem, index) => (
             <Accordion.Item key={index} value={dataItem.id}>
-              <Accordion.Header>
+              <Accordion.Header className={styles.AccordionHeader}>
+                {isBookmarked(
+                  isInitialBookmarkIndexDataItem(dataItem)
+                    ? dataItem.originalId
+                    : dataItem.id
+                ) ? (
+                  <BookmarkFilledIcon
+                    data-item-id={
+                      isInitialBookmarkIndexDataItem(dataItem)
+                        ? dataItem.originalId
+                        : dataItem.id
+                    }
+                    onClick={onClickBookmark}
+                  />
+                ) : (
+                  <BookmarkIcon
+                    data-item-id={dataItem.id}
+                    onClick={onClickBookmark}
+                  />
+                )}
                 <Accordion.Trigger className={styles.AccordionTrigger}>
-                  {isBookmarked(
+                  {/* {isBookmarked(
                     isInitialBookmarkIndexDataItem(dataItem)
                       ? dataItem.originalId
                       : dataItem.id
@@ -196,7 +215,7 @@ const DataItemsAccordion = ({
                       data-item-id={dataItem.id}
                       onClick={onClickBookmark}
                     />
-                  )}
+                  )} */}
 
                   <ChevronDownIcon />
                   {dataItem.title}

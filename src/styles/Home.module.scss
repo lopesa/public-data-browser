@@ -1,3 +1,5 @@
+@import "@radix-ui/colors/sand.css";
+@import "@radix-ui/colors/red.css";
 .MainContainer {
   margin: 0 auto;
   max-width: 95vw;
@@ -6,5 +8,28 @@
   .DatasetSelector {
     margin: 30px auto 40px;
     display: block;
+  }
+
+  .MessagesContainer {
+    margin: 0 auto;
+    width: fit-content;
+    font-size: 13px;
+    color: var(--sand11);
+
+    .Error {
+      color: var(--red11);
+    }
+  }
+
+  .DatasetInfoContainer {
+    h3,
+    h4,
+    p {
+      margin: 10px 0;
+      font-size: 0.8em;
+      &.Bold {
+        font-weight: bold;
+      }
+    }
   }
 }

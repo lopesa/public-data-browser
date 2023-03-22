@@ -4,6 +4,9 @@
     // AccordionTrigger
     margin: 0;
   }
+  .AccordionHeader {
+    display: flex;
+  }
   .AccordionTrigger {
     all: unset;
     cursor: pointer;
