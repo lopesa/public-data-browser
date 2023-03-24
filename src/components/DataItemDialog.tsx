@@ -1,21 +1,11 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import {
-  DepartmentOfAgricultureDataItem,
-  DepartmentOfAgricultureDistributionItem,
-} from "types/department-of-agriculture";
-import styled, { keyframes } from "styled-components";
-import { blackA, violet } from "@radix-ui/colors";
-import DOMPurify from "dompurify";
+import { DepartmentOfAgricultureDistributionItem } from "types/department-of-agriculture";
 import { useEffect, useState } from "react";
 import DatasetIndex from "services/dataset-index";
 import { DatasetsAvailable } from "types/dataset-index-type";
 import styles from "styles/DataItemDialog.module.scss";
-import ChartDialog from "./ChartDialog";
-import {
-  DepartmentOfEnergyDataItem,
-  DepartmentOfEnergyDistributionItem,
-} from "types/department-of-energy";
+import { DepartmentOfEnergyDistributionItem } from "types/department-of-energy";
 import { getFileExtension } from "utils/utils-general";
 import PreviewData from "./PreviewData";
 import * as Tabs from "@radix-ui/react-tabs";

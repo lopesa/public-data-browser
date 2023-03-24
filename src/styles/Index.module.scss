@@ -1,6 +1,7 @@
 @import "@radix-ui/colors/sand.css";
 .AppContainer {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   justify-content: center;

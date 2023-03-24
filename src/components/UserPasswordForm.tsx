@@ -5,6 +5,7 @@ import {
   useCreateUserMutation,
 } from "services/apiSlice";
 import { useState } from "react";
+import PDBButton from "./PDBButton";
 
 interface UserPasswordFormProps {
   onSuccess: () => void;
@@ -96,23 +97,17 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
       )}
 
       <Form.Submit asChild>
-        <button
-          data-submit-type="login"
-          className={styles.Button}
-          style={{ marginTop: 10 }}
-        >
+        <PDBButton dataSubmitType="login" style={{ marginTop: 10 }}>
           Login
-        </button>
+        </PDBButton>
       </Form.Submit>
-      <div style={{ width: "100%", textAlign: "center" }}>- or -</div>
+      <div style={{ width: "100%", textAlign: "center", margin: "10px 0 3px" }}>
+        - or -
+      </div>
       <Form.Submit asChild>
-        <button
-          data-submit-type="createAccount"
-          className={styles.Button}
-          style={{ marginTop: 10 }}
-        >
+        <PDBButton dataSubmitType="createAccount" style={{ marginTop: 10 }}>
           Create Account
-        </button>
+        </PDBButton>
       </Form.Submit>
     </Form.Root>
   );

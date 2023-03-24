@@ -24,6 +24,7 @@ import {
 } from "services/apiSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import LoginSignupAlert from "components/LoginSignupAlert";
+import LoginSignupDialog from "components/LoginSignupDialog";
 import {
   setHasSeenMakeAccountSuggestionDialog,
   selectHasSeenMakeAccountSuggestionDialog,
@@ -31,6 +32,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectToken } from "app/User.slice";
+import { selectDatasetSelected } from "app/DatasetSelected.slice";
 
 interface DataItemsAccordionProps {
   dataItems: InitialIndexDataItem[] | InitialBookmarkIndexDataItem[];
@@ -43,10 +45,12 @@ const DataItemsAccordion = ({
   openAll,
 }: DataItemsAccordionProps) => {
   const localBookmarks = useAppSelector(selectBookmarks);
+  const activeDataset = useSelector(selectDatasetSelected);
   const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =
     useLazyGetBookmarksQuery();
   const [value, setValue] = useState<string[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const token = useAppSelector(selectToken);
   let bookmarks = token ? remoteBookmarks : localBookmarks;
   const dispatch = useAppDispatch();
@@ -93,8 +97,8 @@ const DataItemsAccordion = ({
 
   const onClickBookmark = async (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
-    if (!hasSeenMakeAccountSuggestionDialog) {
-      setAlertOpen(true);
+    if (!token && !hasSeenMakeAccountSuggestionDialog) {
+      setDialogOpen(true);
       dispatch(setHasSeenMakeAccountSuggestionDialog(true));
     }
 
@@ -141,19 +145,6 @@ const DataItemsAccordion = ({
     }
   };
 
-  const onSignupComplete = async () => {
-    localBookmarks &&
-      (await addBookmarks(
-        localBookmarks.map((bookmark) => {
-          return {
-            dataItemUuid: bookmark.id,
-            datasetId: bookmark.datasetId,
-          };
-        })
-      ));
-    getRemoteBookmarks();
-  };
-
   const isInitialBookmarkIndexDataItem = (
     indexItem: InitialBookmarkIndexDataItem | InitialIndexDataItem
   ): indexItem is InitialBookmarkIndexDataItem => {
@@ -162,10 +153,11 @@ const DataItemsAccordion = ({
 
   return (
     <>
-      <LoginSignupAlert
-        parentOpenFlag={alertOpen}
-        parentOpenSetter={setAlertOpen}
-        onSuccess={onSignupComplete}
+      <LoginSignupDialog
+        parentOpen={dialogOpen}
+        parentSetOpen={setDialogOpen}
+        onSuccess={() => setDialogOpen(false)}
+        showNoThanksButton={true}
       />
       <Accordion.Root
         type="multiple"
@@ -223,11 +215,13 @@ const DataItemsAccordion = ({
               </Accordion.Header>
               <Accordion.Content className={styles.AccordionContent}>
                 <div>{dataItem.description}</div>
-                <DataItemDialog
-                  key={index}
-                  dataItem={dataItem}
-                  datasetId={DatasetsAvailable.departmentOfAgriculture}
-                />
+                {activeDataset && (
+                  <DataItemDialog
+                    key={index}
+                    dataItem={dataItem}
+                    datasetId={activeDataset}
+                  />
+                )}
               </Accordion.Content>
             </Accordion.Item>
           ))}
