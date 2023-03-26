@@ -1,5 +1,5 @@
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import DatasetIndex from "services/dataset-index";
 import { DatasetsAvailable } from "types/dataset-index-type";
 import styles from "styles/DatasetSelector.module.scss";

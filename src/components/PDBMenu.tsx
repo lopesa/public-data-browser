@@ -1,5 +1,4 @@
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { CaretDownIcon } from "@radix-ui/react-icons";
 import styles from "styles/PDBMenu.module.scss";
 import { Link } from "react-router-dom";
 import { selectToken } from "app/User.slice";
@@ -14,12 +13,6 @@ const PDBMenu = () => {
           <NavigationMenu.Link asChild className={styles.NavigationMenuLink}>
             <Link to="/about">About</Link>
           </NavigationMenu.Link>
-          {/* <NavigationMenu.Trigger className={styles.NavigationMenuTrigger}>
-            About <CaretDownIcon className={styles.CaretDown} aria-hidden />
-          </NavigationMenu.Trigger>
-          <NavigationMenu.Content className={styles.NavigationMenuContent}>
-            
-          </NavigationMenu.Content> */}
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Link

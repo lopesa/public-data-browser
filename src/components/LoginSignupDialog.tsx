@@ -18,6 +18,7 @@ type LoginSignupDialogProps = {
   parentSetOpen: Dispatch<SetStateAction<boolean>>;
   onSuccess?: () => void;
   showNoThanksButton?: boolean;
+  suppressTitle?: boolean;
 };
 
 const LoginSignupDialog = ({
@@ -25,6 +26,7 @@ const LoginSignupDialog = ({
   parentSetOpen,
   onSuccess,
   showNoThanksButton,
+  suppressTitle,
 }: LoginSignupDialogProps) => {
   const localBookmarks = useAppSelector(selectBookmarks);
   const [
@@ -53,10 +55,15 @@ const LoginSignupDialog = ({
         <Dialog.Content
           className={`${PDBDialogCommonStyles.PDBDialogContent} ${styles.LoginSignupDialogContent}`}
         >
-          <Dialog.Title className={PDBDialogCommonStyles.PDBDialogTitle}>
-            Login or create a free account to persist and retrieve your
-            bookmark?
-          </Dialog.Title>
+          {!suppressTitle && (
+            <Dialog.Title
+              style={{ marginBottom: "10px" }}
+              className={PDBDialogCommonStyles.PDBDialogTitle}
+            >
+              Login or create a free account to persist and retrieve your
+              bookmarks?
+            </Dialog.Title>
+          )}
           <Dialog.Close
             className={PDBDialogCommonStyles.PDBDialogCloseButton}
             aria-label="Close"

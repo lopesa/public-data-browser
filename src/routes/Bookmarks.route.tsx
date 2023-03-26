@@ -30,6 +30,7 @@ export default function Bookmarks() {
           parentOpen={dialogOpen}
           parentSetOpen={setDialogOpen}
           onSuccess={() => setDialogOpen(false)}
+          suppressTitle={!bookmarks?.length}
         />
       )}
       {!!bookmarks?.length && !token && (

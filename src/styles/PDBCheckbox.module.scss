@@ -1,7 +1,4 @@
-@import "@radix-ui/colors/blackA.css";
-@import "@radix-ui/colors/violet.css";
-
-/* reset */
+@use "./_variables.scss" as var;
 
 .CheckboxRoot {
   background-color: white;
@@ -11,24 +8,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px var(--blackA7);
+  box-shadow: 0 2px 10px var.$blackA7;
   button {
     all: unset;
   }
 }
 .CheckboxRoot:hover {
-  background-color: var(--violet3);
+  background-color: var.$accent-color-3;
 }
 // .CheckboxRoot:focus {
 //   box-shadow: 0 0 0 2px black;
 // }
 
 .CheckboxIndicator {
-  color: var(--violet11);
+  color: var.$accent-color;
 }
 
 .CheckboxLabel {
-  // color: white;
   padding-left: 5px;
   font-size: 10px;
   font-weight: 500;

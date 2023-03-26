@@ -1,11 +1,13 @@
+@use "./_variables.scss" as var;
+
 .MessagesContainer {
   margin: 0 auto;
   width: fit-content;
   font-size: 13px;
-  color: var(--sand11);
+  color: var.$copy-color;
 
   .Error {
-    color: var(--red11);
+    color: var.$red11;
   }
 }
 

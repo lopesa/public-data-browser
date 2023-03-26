@@ -101,9 +101,7 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
           Login
         </PDBButton>
       </Form.Submit>
-      <div style={{ width: "100%", textAlign: "center", margin: "10px 0 3px" }}>
-        - or -
-      </div>
+      <div className={styles.OrDivider}>- or -</div>
       <Form.Submit asChild>
         <PDBButton dataSubmitType="createAccount" style={{ marginTop: 10 }}>
           Create Account

@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function Root() {
   return (
-    <>
+    <div className={styles.AppContainer}>
       <header className={styles.AppHeaderBlock}>
         <Link style={{ color: "inherit", textDecoration: "inherit" }} to="/">
           <h1>Public Data Browser</h1>
@@ -15,6 +15,6 @@ export default function Root() {
         </div>
       </header>
       <Outlet />
-    </>
+    </div>
   );
 }

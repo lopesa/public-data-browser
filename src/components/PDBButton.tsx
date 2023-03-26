@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "styles/PDBButton.module.scss";
 
 type PDBButtonProps = {
@@ -7,21 +8,30 @@ type PDBButtonProps = {
   style?: React.CSSProperties;
 };
 
-const PDBButton = (props: PDBButtonProps) => {
-  const { children, dataSubmitType, onClick, style } = props;
-  return (
-    <button
-      style={style}
-      data-submit-type={dataSubmitType}
-      className={styles.Button}
-      onClick={(e) => {
-        // e.preventDefault();
-        onClick?.();
-      }}
-    >
-      {children}
-    </button>
-  );
-};
+/**
+ * have run into this forwardref issue a couple times now and
+ * end up back at this page to solve
+ * https://github.com/radix-ui/primitives/issues/953
+ * this is when the parent of a React component is a Radix component
+ * and uses asChild
+ */
+
+const PDBButton = React.forwardRef<HTMLButtonElement, PDBButtonProps>(
+  ({ children, dataSubmitType, onClick, style }: PDBButtonProps, ref) => {
+    return (
+      <button
+        style={style}
+        data-submit-type={dataSubmitType}
+        className={styles.Button}
+        onClick={(e) => {
+          onClick?.();
+        }}
+        ref={ref}
+      >
+        {children}
+      </button>
+    );
+  }
+);
 
 export default PDBButton;

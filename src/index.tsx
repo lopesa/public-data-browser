@@ -8,7 +8,6 @@ import Root from "./routes/Root.route";
 import Home from "./routes/Home.route";
 import Bookmarks from "./routes/Bookmarks.route";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import styles from "styles/Index.module.scss";
 import About from "routes/About.route";
 
 const container = document.getElementById("root")!;
@@ -38,9 +37,7 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <div className={styles.AppContainer}>
-        <RouterProvider router={router} />
-      </div>
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
