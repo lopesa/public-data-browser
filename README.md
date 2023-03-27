@@ -2,6 +2,13 @@
 
 in a separate repo
 
+### Adding a new Data Source.
+
+- add to all parts of dataset-index-type file, some types come from the following steps
+- add the apislice endpoints
+- add a type file in the types folder
+- add dataset to datasetIndex in file with that name
+
 ---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.

@@ -3,6 +3,8 @@ import {
   useGetDepartmentOfAgricultureDataByIdQuery,
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
+  useGetInternationalCoffeeOrganizationDataAllQuery,
+  useGetInternationalCoffeeOrganizationDataByIdQuery,
 } from "services/apiSlice";
 
 import {
@@ -31,6 +33,12 @@ export const DatasetIndex: Record<DatasetsAvailable, DatasetInfo> = {
     getAll: useGetBaseDepartmentOfEnergyDataAllQuery,
     getById: useGetDepartmentOfEnergyDataByIdQuery,
     endpointName: "getBaseDepartmentOfEnergyDataAll",
+  },
+  internationalCoffeeOrganization: {
+    title: "International Coffee Organization",
+    getAll: useGetInternationalCoffeeOrganizationDataAllQuery,
+    getById: useGetInternationalCoffeeOrganizationDataByIdQuery,
+    endpointName: "getInternationalCoffeeOrganizationDataAll",
   },
 };
 

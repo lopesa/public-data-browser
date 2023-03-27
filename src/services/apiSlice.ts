@@ -6,6 +6,7 @@ import {
 import { DatasetsAvailable } from "types/dataset-index-type";
 import { DepartmentOfAgricultureDataItem } from "types/department-of-agriculture";
 import { DepartmentOfEnergyDataItem } from "types/department-of-energy";
+import { InternationalCoffeeOrganizationDataItem } from "types/international-coffee-organization";
 import {
   InitialBookmarkIndexDataItem,
   InitialIndexData,
@@ -43,12 +44,10 @@ export const apiSlice = createApi({
     timeout: 10000,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).user.token;
-
       // If we have a token set in state, let's assume that we should be passing it.
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
-
       return headers;
     },
   }),
@@ -97,6 +96,28 @@ export const apiSlice = createApi({
     >({
       query: (id) => ({
         url: `/department-of-energy/${id}`,
+      }),
+    }),
+    getInternationalCoffeeOrganizationDataAll: builder.query<
+      InitialIndexData,
+      void
+    >({
+      query: () => ({
+        url: "/international-coffee-organization",
+      }),
+      transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
+        return addDatasetId(
+          baseQueryReturnValue,
+          DatasetsAvailable.internationalCoffeeOrganization
+        );
+      },
+    }),
+    getInternationalCoffeeOrganizationDataById: builder.query<
+      InternationalCoffeeOrganizationDataItem,
+      string
+    >({
+      query: (id) => ({
+        url: `/international-coffee-organization/${id}`,
       }),
     }),
     getSpreadsheetData: builder.query<SpreadsheetData, string>({
@@ -154,6 +175,8 @@ export const {
   useGetDepartmentOfAgricultureDataByIdQuery,
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
+  useGetInternationalCoffeeOrganizationDataAllQuery,
+  useGetInternationalCoffeeOrganizationDataByIdQuery,
   useGetSpreadsheetDataQuery,
   useLazyLoginUserQuery,
   useCreateUserMutation,

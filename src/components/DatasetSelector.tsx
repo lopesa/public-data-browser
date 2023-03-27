@@ -32,7 +32,7 @@ const DatasetSelector: React.FC<DatasetSelectorProps> = ({
       </Select.Trigger>
 
       <Select.Portal>
-        <Select.Content className={styles.SelectContent}>
+        <Select.Content className={styles.SelectContent} position="popper">
           {/* <Select.ScrollUpButton /> */}
           <Select.Viewport className={styles.SelectViewport}>
             {DatasetIndex &&
