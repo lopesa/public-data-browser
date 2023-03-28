@@ -17,7 +17,10 @@ import {
 import { setEmailAndToken } from "app/User.slice";
 import { RootState } from "app/store";
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://api.publicdatabrowser.com"
+    : "http://localhost:3001";
 
 const addDatasetId = (
   baseQueryReturnValue: InitialIndexData,
