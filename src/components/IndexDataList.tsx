@@ -18,7 +18,7 @@ function IndexDataList({ data }: IndexDataListProps) {
   const [openAllAccordions, setOpenAllAccordions] = useState(false);
 
   useEffect(() => {
-    type DataType = "xml" | "csv" | "xls";
+    type DataType = "xml" | "csv" | "xls" | "xlsx";
     const includesArray: DataType[] = [];
     if (showXml) {
       includesArray.push("xml");
@@ -28,6 +28,7 @@ function IndexDataList({ data }: IndexDataListProps) {
     }
     if (showXls) {
       includesArray.push("xls");
+      includesArray.push("xlsx");
     }
 
     if (!includesArray.length) {
