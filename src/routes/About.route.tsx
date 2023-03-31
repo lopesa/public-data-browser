@@ -4,11 +4,30 @@ export default function About() {
   return (
     <div className={styles.MainContainer}>
       <h3>About</h3>
-      <p className={styles.Bold}>
-        • The primary driver for this project is that I&rsquo;m an Engineer who
-        needed a side project.
+      <p>
+        The primary driver for this project is that I&rsquo;m an Engineer who
+        needed a side project. For more of a look at what I used technically
+        please check out blog posts [tbd]
       </p>
-      <p className={styles.Bold}>
+      <p>
+        Core functionality for now should be to take in any JSON dataset and
+        present it in a readable way, especially to quickly preview data sets
+        that may be included. It should be built in a modular way so those core
+        functions can expand easily. (Import other than JSON, do more with the
+        datasets, etc.)
+      </p>
+      <p>
+        It's fascinating how much data there is publically available and I
+        wanted a single place to browse though it, without the mental overhead
+        of switching presentations often.
+      </p>
+      <p>
+        In a way though, this app represents the core of most apps. This
+        represents one of my main 2 greenfield stacks to build an app. This one
+        beiong redux-ey and the other being next.js.
+      </p>
+
+      {/* <p className={styles.Bold}>
         • This is piecing together a lot of awesome open source tools and
         libraries, and that's mostly all it is. The code for this available
         here: [tbd]. Please feel free to use it or make suggestions there on
@@ -44,7 +63,7 @@ export default function About() {
       <p>Interesting stuff I've found:</p>
       <a href="https://rath.kanaries.net/" target="_blank" rel="noreferrer">
         https://rath.kanaries.net/
-      </a>
+      </a> */}
     </div>
   );
 }
