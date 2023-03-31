@@ -17,7 +17,7 @@ export default function About() {
         datasets, etc.)
       </p>
       <p>
-        It's fascinating how much data there is publically available and I
+        It's interesting how much data there is publically available and I
         wanted a single place to browse though it, without the mental overhead
         of switching presentations often.
       </p>

@@ -36,7 +36,7 @@ const LoginSignupDialog = ({
   const [getRemoteBookmarks, { data: remoteBookmarks, isLoading, error }] =
     useLazyGetBookmarksQuery();
   const addLocalBookmarks = async () => {
-    localBookmarks &&
+    localBookmarks.length &&
       (await addBookmarks(
         localBookmarks.map((bookmark) => {
           return {
