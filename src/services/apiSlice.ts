@@ -19,7 +19,8 @@ import { RootState } from "app/store";
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://api.publicdatabrowser.com"
+    ? // ? "https://api.publicdatabrowser.com"
+      "https://databrowserprototype.lopesdesign.com/api"
     : "http://localhost:3001";
 
 const addDatasetId = (
