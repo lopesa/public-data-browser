@@ -88,13 +88,7 @@ const UserPasswordForm = ({ onSuccess }: UserPasswordFormProps) => {
         </Form.Control>
       </Form.Field>
 
-      {serverError && (
-        <div className={styles.FormMessage}>
-          Sorry, there was a problem creating your account. Consider trying
-          logging in with the email you are trying, in case you already have an
-          account, or just trying again.
-        </div>
-      )}
+      {serverError && <div className={styles.FormMessage}>server error</div>}
 
       <Form.Submit asChild>
         <PDBButton dataSubmitType="login" style={{ marginTop: 10 }}>
