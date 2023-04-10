@@ -9,6 +9,10 @@ import Home from "./routes/Home.route";
 import Bookmarks from "./routes/Bookmarks.route";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import About from "routes/About.route";
+import ReactGA from "react-ga4";
+
+const TRACKING_ID = "G-BG9CD130J1";
+ReactGA.initialize([{ trackingId: TRACKING_ID }]);
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

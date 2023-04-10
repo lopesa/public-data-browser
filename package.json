@@ -26,6 +26,7 @@
     "react": "^18.2.0",
     "react-data-grid": "^7.0.0-beta.26",
     "react-dom": "^18.2.0",
+    "react-ga4": "^2.1.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
@@ -58,14 +59,14 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.25",
-    "@types/react": "^18.0.6",
-    "@types/react-dom": "^18.0.2",
     "@types/d3": "^7.4.0",
     "@types/dompurify": "^2.4.0",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.25",
     "@types/papaparse": "^5.3.7",
+    "@types/react": "^18.0.6",
     "@types/react-data-grid": "^4.0.8",
+    "@types/react-dom": "^18.0.2",
     "@types/react-router-dom": "^5.3.3",
     "sass": "^1.58.3"
   }
