@@ -7,8 +7,8 @@ export default function About() {
       <p>
         The primary driver for this project is that I&rsquo;m an Engineer who
         needed a side project. So I took this opportunity to build a full stack
-        app from greenfield, taking care to choose tech pieces I wanted to work
-        with/master. So it includes:
+        app from greenfield, taking care to choose tech elements I wanted to
+        work with/master. These include:
         <ul>
           <li>Docker (compose)</li>
           <li>Express</li>
@@ -16,18 +16,19 @@ export default function About() {
           <li>MySql</li>
           <li>React</li>
           <li>Redux</li>
-          <li>redux-toolkit, rtk query</li>
-          <li>radix-ui</li>
+          <li>Redux-toolkit, RTK Query</li>
+          <li>Radix UI</li>
         </ul>
       </p>
       <p>
         Core functionality for the app for now should be to take in any JSON
-        dataset and present it in a consistent, readable way, especially to
-        quickly preview data sets that may be included. It should be built in a
-        modular way so those core functions can expand easily. (Import other
-        than JSON, do more with the datasets, etc.)
+        list of datasources and present it in a consistent, readable way,
+        especially to quickly preview data that may be available from a source.
+        It also includes bookmarking and persistence via accounts. It&rsquo;s
+        built with an eye toward expanding these core functions easily. (Import
+        other than JSON, do more with the datasets, etc.)
       </p>
-      <p>
+      {/* <p>
         Funny sidenote, on March 30, 2023 data.gov did a big redesign, making
         their interface to browse their data much better, as well as (as far as
         I can tell, without too much digging) taking away the raw json data
@@ -44,8 +45,14 @@ export default function About() {
         it. I am releasing it now though, as a more unpolished prototype. At the
         very least the data.gov data will become stale, so please actually use
         this at your own risk. No guarantees what will become of it.
+      </p> */}
+      <p>
+        This is a Work in progress, currently mvp. The data is heavily data.gov
+        data, which follows a certain format, and it also includes another
+        (coffee) dataset for proof of concept of taking in data in other
+        formats.
       </p>
-      <p>the code for it is here: [tbd]</p>
+      <p>The code for the project is here: [tbd]</p>
     </div>
   );
 }
