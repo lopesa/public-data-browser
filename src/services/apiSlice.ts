@@ -16,6 +16,7 @@ import {
 } from "types/types-general";
 import { setEmailAndToken } from "app/User.slice";
 import { RootState } from "app/store";
+import { DepartmentOfTreasuryDataItem } from "types/department-of-treasury";
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
@@ -102,6 +103,27 @@ export const apiSlice = createApi({
         url: `/department-of-energy/${id}`,
       }),
     }),
+    getBaseDepartmentOfTreasuryDataAll: builder.query<InitialIndexData, void>({
+      query: () => ({
+        url: "/department-of-treasury",
+      }),
+      transformResponse: (baseQueryReturnValue: InitialIndexData, meta) => {
+        return addDatasetId(
+          baseQueryReturnValue,
+          // meta,
+          DatasetsAvailable.departmentOfTreasury
+        );
+      },
+      // providesTags: ["DepartmentOfTreasuryGetAll"],
+    }),
+    getDepartmentOfTreasuryDataById: builder.query<
+      DepartmentOfTreasuryDataItem,
+      string
+    >({
+      query: (id) => ({
+        url: `/department-of-treasury/${id}`,
+      }),
+    }),
     getInternationalCoffeeOrganizationDataAll: builder.query<
       InitialIndexData,
       void
@@ -179,6 +201,8 @@ export const {
   useGetDepartmentOfAgricultureDataByIdQuery,
   useGetBaseDepartmentOfEnergyDataAllQuery,
   useGetDepartmentOfEnergyDataByIdQuery,
+  useGetBaseDepartmentOfTreasuryDataAllQuery,
+  useGetDepartmentOfTreasuryDataByIdQuery,
   useGetInternationalCoffeeOrganizationDataAllQuery,
   useGetInternationalCoffeeOrganizationDataByIdQuery,
   useGetSpreadsheetDataQuery,

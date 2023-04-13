@@ -5,6 +5,8 @@ import {
   useGetDepartmentOfEnergyDataByIdQuery,
   useGetInternationalCoffeeOrganizationDataAllQuery,
   useGetInternationalCoffeeOrganizationDataByIdQuery,
+  useGetBaseDepartmentOfTreasuryDataAllQuery,
+  useGetDepartmentOfTreasuryDataByIdQuery,
 } from "services/apiSlice";
 
 import {
@@ -32,6 +34,12 @@ export const DatasetIndex: Record<DatasetsAvailable, DatasetInfo> = {
     title: "US Department of Energy",
     getAll: useGetBaseDepartmentOfEnergyDataAllQuery,
     getById: useGetDepartmentOfEnergyDataByIdQuery,
+    endpointName: "getBaseDepartmentOfEnergyDataAll",
+  },
+  departmentOfTreasury: {
+    title: "US Department of Treasury",
+    getAll: useGetBaseDepartmentOfTreasuryDataAllQuery,
+    getById: useGetDepartmentOfTreasuryDataByIdQuery,
     endpointName: "getBaseDepartmentOfEnergyDataAll",
   },
   internationalCoffeeOrganization: {
