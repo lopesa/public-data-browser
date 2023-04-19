@@ -10,6 +10,7 @@ import { getFileExtension } from "utils/utils-general";
 import PreviewData from "./PreviewData";
 import * as Tabs from "@radix-ui/react-tabs";
 import { InitialIndexDataItem } from "types/types-general";
+import PDBButton from "./PDBButton";
 
 type DistributionItems =
   | DepartmentOfAgricultureDistributionItem
@@ -103,7 +104,7 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
         }}
         className={styles.DialogTrigger}
       >
-        <button>Details</button>
+        <PDBButton>Details</PDBButton>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={styles.DialogOverlay} />
