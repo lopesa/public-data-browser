@@ -17,15 +17,16 @@ type PDBButtonProps = {
  */
 
 const PDBButton = React.forwardRef<HTMLButtonElement, PDBButtonProps>(
-  ({ children, dataSubmitType, onClick, style }: PDBButtonProps, ref) => {
+  (
+    { children, dataSubmitType, onClick: passedOnClick, style }: PDBButtonProps,
+    ref
+  ) => {
     return (
       <button
         style={style}
         data-submit-type={dataSubmitType}
         className={styles.Button}
-        onClick={(e) => {
-          onClick?.();
-        }}
+        onClick={passedOnClick && passedOnClick}
         ref={ref}
       >
         {children}

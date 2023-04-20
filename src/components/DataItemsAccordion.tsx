@@ -32,6 +32,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectToken } from "app/User.slice";
 import { selectDatasetSelected } from "app/DatasetSelected.slice";
+import DOMPurify from "dompurify";
 
 interface DataItemsAccordionProps {
   dataItems: InitialIndexDataItem[] | InitialBookmarkIndexDataItem[];
@@ -166,7 +167,11 @@ const DataItemsAccordion = ({
       >
         {dataItems?.length &&
           dataItems.map((dataItem, index) => (
-            <Accordion.Item key={index} value={dataItem.id}>
+            <Accordion.Item
+              key={index}
+              value={dataItem.id}
+              style={{ marginBottom: "5px" }}
+            >
               <Accordion.Header className={styles.AccordionHeader}>
                 <div className={styles.BookmarkContainer}>
                   {isBookmarked(
@@ -189,7 +194,11 @@ const DataItemsAccordion = ({
                     />
                   )}
                 </div>
-                <Accordion.Trigger className={styles.AccordionTrigger}>
+                <Accordion.Trigger
+                  className={`${styles.AccordionTrigger} ${
+                    index % 2 === 0 ? styles.even : styles.odd
+                  }`}
+                >
                   <div className={styles.ChevronContainer}>
                     <ChevronDownIcon />
                   </div>
@@ -197,7 +206,16 @@ const DataItemsAccordion = ({
                 </Accordion.Trigger>
               </Accordion.Header>
               <Accordion.Content className={styles.AccordionContent}>
-                <div>{dataItem.description}</div>
+                {/* <div>{dataItem.description}</div> */}
+                {dataItem.description ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(dataItem.description),
+                    }}
+                  ></div>
+                ) : (
+                  <div>No description available</div>
+                )}
                 {activeDataset && (
                   <DataItemDialog
                     key={index}

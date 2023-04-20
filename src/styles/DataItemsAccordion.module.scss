@@ -4,6 +4,7 @@
   h3 {
     // AccordionTrigger
     margin: 0;
+    font-size: 1em;
   }
   .AccordionHeader {
     display: flex;
@@ -17,8 +18,15 @@
   .AccordionTrigger {
     all: unset;
     display: flex;
-    font-size: 1.3em;
-    margin-bottom: 10px;
+    // font-size: 1.3em;
+    margin-bottom: 8px;
+
+    &.even {
+      color: var.$background-accent-color-10;
+    }
+    &.odd {
+      color: var.$background-color-10;
+    }
 
     .ChevronContainer {
       width: 20px;
@@ -28,14 +36,20 @@
   }
 
   .AccordionContent {
-    font-size: 1.2em;
-    line-height: 1.5em;
-    margin-bottom: 15px;
+    * {
+      margin: 0;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+    // font-size: 1.2em;
+    // line-height: 1.5em;
+    margin-bottom: 25px;
     padding-left: 35px;
 
     button {
       margin-top: 10px;
-      font-size: 1em;
+      font-size: 0.8em;
       height: 25px;
       width: 80px;
       background-color: var.$background-color-3;

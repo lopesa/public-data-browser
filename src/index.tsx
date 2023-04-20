@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { store } from "./app/store";
+import { persistor, store } from "./app/store";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import Root from "./routes/Root.route";
@@ -10,6 +10,7 @@ import Bookmarks from "./routes/Bookmarks.route";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import About from "routes/About.route";
 import ReactGA from "react-ga4";
+import { PersistGate } from "redux-persist/integration/react";
 
 const TRACKING_ID = "G-BG9CD130J1";
 ReactGA.initialize([{ trackingId: TRACKING_ID }]);
@@ -41,7 +42,9 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
