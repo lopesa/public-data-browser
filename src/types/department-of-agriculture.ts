@@ -21,7 +21,7 @@ export type DepartmentOfAgricultureDataItem = {
   modified?: string;
   publisher?: string;
   accrualPeriodicity?: string;
-  keyword?: string;
+  keyword?: string[];
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;

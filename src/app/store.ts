@@ -28,13 +28,19 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["apiSlice"],
+  blacklist: ["apiSlice", "user"],
+};
+
+const userPersistConfig = {
+  key: "user",
+  storage,
+  blacklist: ["hasSeenMakeAccountSuggestionDialog"],
 };
 
 const reducers = combineReducers({
   bookmarks: bookmarksReducer,
   datasetSelected: datasetSelectedReducer,
-  user: userReducer,
+  user: persistReducer(userPersistConfig, userReducer),
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
