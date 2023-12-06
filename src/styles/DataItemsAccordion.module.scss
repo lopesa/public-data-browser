@@ -5,6 +5,7 @@
     // AccordionTrigger
     margin: 0;
     font-size: 1em;
+    font-weight: normal;
   }
   .AccordionHeader {
     display: flex;
@@ -21,12 +22,12 @@
     // font-size: 1.3em;
     margin-bottom: 8px;
 
-    &.even {
-      color: var.$background-accent-color-10;
-    }
-    &.odd {
-      color: var.$background-color-10;
-    }
+    // &.even {
+    //   color: var.$background-accent-color-10;
+    // }
+    // &.odd {
+    //   color: var.$background-color-10;
+    // }
 
     .ChevronContainer {
       width: 20px;
@@ -36,6 +37,7 @@
   }
 
   .AccordionContent {
+    font-size: 0.85em;
     * {
       margin: 0;
     }

@@ -1,26 +1,12 @@
 import styles from "styles/Root.module.scss";
 import PDBMenu from "components/PDBMenu";
 import { Outlet } from "react-router-dom";
-import useWindowSize from "hooks/useWindowSize";
-import { useEffect, useState } from "react";
-import { BREAKPOINTS } from "../constants";
 import AppLogo from "components/AppLogo";
 import { BreakpointContext } from "contexts/BreakpointContext";
+import useBreakpoint from "hooks/useBreakpoint";
 
 export default function Root() {
-  const windowSize = useWindowSize();
-  const [breakpoint, setBreakpoint] = useState<keyof typeof BREAKPOINTS | null>(
-    null
-  );
-  useEffect(() => {
-    if (windowSize.innerWidth < BREAKPOINTS.PHONE) {
-      setBreakpoint("PHONE");
-    } else if (windowSize.innerWidth < BREAKPOINTS.SMALL_WINDOW) {
-      setBreakpoint("SMALL_WINDOW");
-    } else {
-      setBreakpoint(null);
-    }
-  }, [windowSize]);
+  const breakpoint = useBreakpoint();
   return (
     <BreakpointContext.Provider value={breakpoint}>
       <div className={styles.AppContainer}>

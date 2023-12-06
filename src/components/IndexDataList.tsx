@@ -52,12 +52,12 @@ function IndexDataList({ data }: IndexDataListProps) {
   return (
     <div className={styles.IndexDataListContainer}>
       {filteredData && (
-        <h4>
+        <p className={styles.NumItemsContainer}>
           <span>Total Num Items: {data.length}</span>/
           {filteredData && (
             <span> Current Num Items: {filteredData.length}</span>
           )}
-        </h4>
+        </p>
       )}
       <div className={styles.CheckboxGroupContainer}>
         <PDBCheckbox label="Show items with Xml" onCheckedChange={setShowXml} />

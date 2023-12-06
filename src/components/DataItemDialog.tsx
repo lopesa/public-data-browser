@@ -13,6 +13,8 @@ import { InitialIndexDataItem } from "types/types-general";
 import PDBButton from "./PDBButton";
 import * as Accordion from "@radix-ui/react-accordion";
 import DOMPurify from "dompurify";
+import useBreakpoint from "hooks/useBreakpoint";
+import * as Separator from "@radix-ui/react-separator";
 // import json2html from "json2html";
 
 type DistributionItems =
@@ -31,6 +33,7 @@ const onClickDownloadXls = (e: React.MouseEvent<HTMLButtonElement>) => {
 
 const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
   const [skip, setSkip] = useState(true);
+  const breakpoint = useBreakpoint();
   // @TODO default to departmentOfAgriculture if not datasetId
   // make the prop not optionally undefined
   const { data, error, isLoading } = DatasetIndex[
@@ -119,7 +122,11 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
         <Dialog.Overlay className={styles.DialogOverlay} />
         {!data && <Dialog.Content>...loading</Dialog.Content>}
         {data && (
-          <Dialog.Content className={styles.DialogContent}>
+          <Dialog.Content
+            className={`${styles.DialogContent} ${
+              breakpoint === "PHONE" && styles.phone
+            }`}
+          >
             <Dialog.Close
               className={styles.DialogCloseButton}
               aria-label="Close"
@@ -154,7 +161,7 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
               data.distribution.map((distribution, index) => {
                 return (
                   <div key={index}>
-                    <Dialog.Description className="DialogDescription">
+                    <Dialog.Description className={styles.DialogDescription}>
                       {distribution.title && (
                         <div style={{ fontWeight: "bold" }}>
                           {distribution.title}
@@ -175,6 +182,8 @@ const DataItemDialog = ({ dataItem, datasetId }: DataItemDialogProps) => {
                   </div>
                 );
               })}
+
+            <Separator.Root className={styles.SeparatorRoot} />
 
             <Accordion.Root
               className={accordionStyles.AccordionRoot}
